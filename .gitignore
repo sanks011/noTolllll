@@ -1,0 +1,69 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+*/node_modules/
+
+# production
+build/
+dist/
+*/build/
+*/dist/
+
+# env files - NEVER commit these to version control
+.env
+.env.*
+backend/.env*
+frontend/.env*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Next.js
+.next/
+out/
+
+# Vercel
+.vercel
+
+# Uploads
+uploads/
+backend/uploads/
+
+# Temporary files
+tmp/
+temp/
