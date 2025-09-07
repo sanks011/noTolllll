@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import ProfileCompletionModal from "@/components/ProfileCompletionModal"
 import NewsSection from "@/components/NewsSection"
 import TradeDataChart from "@/components/TradeDataChart"
+import SchemesSection from "@/components/SchemesSection"
 import { useAuth } from "@/contexts/AuthContext"
 import { apiService } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
@@ -265,6 +266,11 @@ export default function SellerDashboard() {
             </Card>
           </div>
         )}
+
+        {/* Government Schemes Section */}
+        <div className="mb-6">
+          <SchemesSection />
+        </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {/* Recent Buyers */}

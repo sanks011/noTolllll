@@ -9418,3 +9418,76 @@
 {"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.206Z"}
 {"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.223Z"}
 {"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.386Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:06.806Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:08.507Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:08.563Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:11.452Z"}
+{"level":"info","message":"Fetching news with query: tariff rates India","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:11.454Z"}
+{"level":"info","message":"Fetched and cached 10 articles for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:17.272Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:17.298Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:17.299Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:25.520Z"}
+{"level":"info","message":"User signed in: test@example.com","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:25.666Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:25.712Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:25.713Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:25.715Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:25.716Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:39.508Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:09:39.909Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:25:39.162Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T15:25:39.409Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T15:25:40.859Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T15:25:40.861Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:25:40.902Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T15:25:41.019Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T15:25:41.224Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T15:25:41.226Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:26:56.728Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:26:57.084Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:27:17.684Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:27:17.751Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:27:25.558Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:27:25.623Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:27:25.724Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:27:25.977Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:08.612Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:08.708Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:08.756Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:09.746Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:40.131Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:40.278Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:41.106Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T15:34:41.107Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:41.111Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:41.264Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T15:34:41.466Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T15:34:41.468Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:48:59.823Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:49:00.779Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:52:21.919Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:52:22.122Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:52:22.195Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:52:23.311Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:07:51.058Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T16:07:51.418Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T16:07:52.616Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T16:07:52.620Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:07:52.630Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T16:07:52.765Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T16:07:52.988Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T16:07:52.989Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:01.579Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:01.700Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:02.587Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T16:11:02.589Z"}
+{"level":"info","message":"GET /api/trade/potential-buyers/090111?limit=15 - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:02.596Z"}
+{"level":"info","message":"Fetching Comtrade data: https://comtradeapi.un.org/data/v1/get/C/A/HS?cmdCode=090111&flowCode=M&includeDesc=true&period=2023%2C2022%2C2021","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:02.728Z"}
+{"level":"error","message":"Comtrade API error:","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:02.950Z"}
+{"level":"error","message":"Error getting potential buyers: Failed to fetch trade data: Request failed with status code 401","service":"tradenavigator-api","stack":"Error: Failed to fetch trade data: Request failed with status code 401\n    at ComtradeService.fetchData (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:70:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async ComtradeService.getPotentialBuyers (D:\\IMPORTANT\\noTolllll\\backend\\services\\comtradeService.js:107:26)\n    at async D:\\IMPORTANT\\noTolllll\\backend\\routes\\trade.js:19:20","timestamp":"2025-09-07T16:11:02.951Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:13.734Z"}
+{"level":"info","message":"Fetching news with query: tariff rates India","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:13.781Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:13.848Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:14.350Z"}
+{"level":"info","message":"Fetched and cached 10 articles for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:18.814Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:18.845Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T16:11:18.846Z"}

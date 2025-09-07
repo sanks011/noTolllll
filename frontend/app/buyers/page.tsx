@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Search, MapPin, Mail, Phone, Star, FileText, Heart, Eye, Loader2, TrendingUp, Globe, BarChart } from "lucide-react"
+import { Search, MapPin, Mail, Phone, Star, FileText, Heart, Eye, Loader2, TrendingUp, Globe, BarChart, Shield } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import DashboardLayout from "@/components/dashboard-layout"
@@ -26,6 +26,8 @@ import { apiService } from "@/lib/api"
 import { useAuth } from "@/contexts/AuthContext"
 import { externalApiService } from "@/lib/external-apis"
 import PotentialBuyersComponent from "@/components/PotentialBuyersComponent"
+import BuyerMessaging from "@/components/BuyerMessaging"
+import ComplianceSupport from "@/components/ComplianceSupport"
 
 // Note: Sample data removed - now using real AI-generated buyer data
 //   {
@@ -111,6 +113,7 @@ import PotentialBuyersComponent from "@/components/PotentialBuyersComponent"
 // Note: Sample data removed - now using real AI-generated buyer data
 
 export default function BuyersPage() {
+  const [activeTab, setActiveTab] = useState("directory")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCountry, setSelectedCountry] = useState("All Countries")
   const [selectedProduct, setSelectedProduct] = useState("All Products")
@@ -121,6 +124,8 @@ export default function BuyersPage() {
   const [selectedBuyer, setSelectedBuyer] = useState<any | null>(null)
   const [marketNews, setMarketNews] = useState<any[]>([])
   const [aiInsights, setAiInsights] = useState<string>("")
+  const [showMessaging, setShowMessaging] = useState<any | null>(null)
+  const [showCompliance, setShowCompliance] = useState(false)
   const { toast } = useToast()
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
@@ -379,7 +384,7 @@ export default function BuyersPage() {
 
   if (authLoading || loading) {
     return (
-      <DashboardLayout userType="indian">
+      <DashboardLayout userType="seller">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
@@ -396,7 +401,7 @@ export default function BuyersPage() {
   }
 
   return (
-    <DashboardLayout userType="indian">
+    <DashboardLayout userType="seller">
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -425,8 +430,8 @@ export default function BuyersPage() {
         </div>
 
         {/* Tabs for organizing different buyer views */}
-        <Tabs defaultValue="directory" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="directory" className="flex items-center gap-2">
               <Search className="h-4 w-4" />
               Buyer Directory
@@ -435,60 +440,18 @@ export default function BuyersPage() {
               <TrendingUp className="h-4 w-4" />
               Potential Buyers
             </TabsTrigger>
+            <TabsTrigger value="messaging" className="flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              Messaging
+            </TabsTrigger>
+            <TabsTrigger value="compliance" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Compliance
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="directory" className="space-y-6">
-            {/* AI Market Insights */}
-            {(aiInsights || marketNews.length > 0) && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {aiInsights && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5" />
-                        AI Market Insights
-                      </CardTitle>
-                      <CardDescription>Real-time analysis powered by Groq AI</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-sm space-y-2">
-                        <p>{aiInsights}</p>
-                        <div className="pt-2">
-                          <Badge variant="secondary" className="text-xs">
-                            <BarChart className="h-3 w-3 mr-1" />
-                            AI Generated
-                          </Badge>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {marketNews.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Globe className="h-5 w-5" />
-                        Latest Trade News
-                      </CardTitle>
-                      <CardDescription>Real-time news from News API</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {marketNews.slice(0, 3).map((article, index) => (
-                          <div key={index} className="border-b pb-2 last:border-b-0">
-                            <h5 className="text-sm font-medium line-clamp-2">{article.title}</h5>
-                            <p className="text-xs text-muted-foreground mt-1">{article.source} • {new Date(article.publishedAt).toLocaleDateString()}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            )}
-
-        {/* Search and Filters */}
+            {/* Search and Filters */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
@@ -680,7 +643,18 @@ export default function BuyersPage() {
                                     </div>
                                   </div>
                                   <div className="flex space-x-2 pt-4">
-                                    <Button asChild className="flex-1">
+                                    <Button 
+                                      className="flex-1"
+                                      onClick={() => {
+                                        setShowMessaging(selectedBuyer);
+                                        setActiveTab("messaging");
+                                        setSelectedBuyer(null); // Close the dialog
+                                      }}
+                                    >
+                                      <Mail className="mr-2 h-4 w-4" />
+                                      Message Buyer
+                                    </Button>
+                                    <Button asChild variant="outline">
                                       <Link href={`/pitch-assistant?buyer=${selectedBuyer.id}`}>
                                         <FileText className="mr-2 h-4 w-4" />
                                         Generate Pitch
@@ -789,6 +763,33 @@ export default function BuyersPage() {
 
           <TabsContent value="potential" className="space-y-6">
             <PotentialBuyersComponent />
+          </TabsContent>
+
+          <TabsContent value="compliance" className="space-y-6">
+            <ComplianceSupport 
+              selectedCountry="United States" 
+              sector={user?.sector || "Seafood"} 
+            />
+          </TabsContent>
+
+          <TabsContent value="messaging" className="space-y-6">
+            {showMessaging ? (
+              <BuyerMessaging 
+                buyer={showMessaging} 
+                onClose={() => setShowMessaging(null)} 
+              />
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Secure Messaging</CardTitle>
+                  <CardDescription>Select a buyer from the directory to start messaging</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center py-12">
+                  <Mail className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">Choose a buyer to begin secure in-platform communication</p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
       </div>
