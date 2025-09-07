@@ -9360,3 +9360,16 @@
 {"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:13.331Z"}
 {"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:14.001Z"}
 {"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:14.056Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:31.311Z"}
+{"level":"info","message":"Fetching news with query: tariff rates India","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:31.314Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:31.335Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:31.402Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:31.430Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:31.844Z"}
+{"level":"info","message":"Fetched and cached 10 articles for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:33.407Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:33.416Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:33.417Z"}
+{"level":"info","message":"GET /api/trade-data/analytics?sector=seafood - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:35.396Z"}
+{"level":"info","message":"GET /api/trade-data/analytics?sector=textile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:37.114Z"}
+{"level":"info","message":"GET /api/trade-data/analytics?sector=seafood - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:38.921Z"}
+{"level":"info","message":"GET /api/trade-data/analytics?sector=textile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:40.801Z"}
