@@ -312,6 +312,53 @@ class ApiService {
       body: JSON.stringify(data),
     });
   }
+
+  // Trade methods
+  async getTradePotentialBuyers(cmdCode: string, limit: number = 10): Promise<any> {
+    return this.request(`/trade/potential-buyers/${cmdCode}?limit=${limit}`);
+  }
+
+  async getTradeFrequentBuyersFromIndia(cmdCode?: string, limit: number = 15): Promise<any> {
+    const params = new URLSearchParams();
+    if (cmdCode) params.append('cmdCode', cmdCode);
+    params.append('limit', limit.toString());
+    
+    return this.request(`/trade/frequent-buyers-from-india?${params}`);
+  }
+
+  async getTradeBilateralAnalysis(countryCode: string, cmdCode?: string): Promise<any> {
+    const params = cmdCode ? `?cmdCode=${cmdCode}` : '';
+    return this.request(`/trade/bilateral-analysis/${countryCode}${params}`);
+  }
+
+  async getTradeExportPerformance(cmdCodes?: string): Promise<any> {
+    const url = cmdCodes ? `/trade/export-performance?cmdCodes=${cmdCodes}` : '/trade/export-performance';
+    return this.request(url);
+  }
+
+  async getTradeTradingPartners(cmdCode?: string, limit: number = 10): Promise<any> {
+    let url = `/trade/trading-partners?limit=${limit}`;
+    if (cmdCode) url += `&cmdCode=${cmdCode}`;
+    return this.request(url);
+  }
+
+  async getTradeMarketOpportunities(sector?: string): Promise<any> {
+    const url = sector ? `/trade/market-opportunities?sector=${sector}` : '/trade/market-opportunities';
+    return this.request(url);
+  }
+
+  async getTradeCommodityTrends(cmdCode: string, years?: string): Promise<any> {
+    let url = `/trade/commodity-trends/${cmdCode}`;
+    if (years) url += `?years=${years}`;
+    return this.request(url);
+  }
+
+  async clearTradeCache(): Promise<any> {
+    return this.request('/trade/clear-cache', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+  }
 }
 
 export const apiService = new ApiService();

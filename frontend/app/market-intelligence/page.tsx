@@ -1,211 +1,153 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts"
-import { TrendingUp, TrendingDown, Filter, Download, Star, Globe, Package, Target, Loader2 } from "lucide-react"
-import DashboardLayout from "@/components/dashboard-layout"
-import { apiService } from "@/lib/api"
-import { useToast } from "@/hooks/use-toast"
-import { useAuth } from "@/contexts/AuthContext"
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Progress } from '@/components/ui/progress'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Skeleton } from '@/components/ui/skeleton'
+import { TrendingUp, TrendingDown, AlertTriangle, Globe, DollarSign, BarChart3, Zap, Brain, Activity } from 'lucide-react'
+import DashboardLayout from '@/components/dashboard-layout'
+import { getTariffRates, getCommodityRates, getMarketDemand, calculateCompetitiveness, getMarketSentiment } from '@/lib/external-apis'
 
-// Sample market intelligence data
-const tariffData = [
-  {
-    country: "Japan",
-    hsCode: "030617",
-    product: "Frozen Shrimp",
-    currentTariff: "2.5%",
-    trend: "down",
-    importVolume: "45,000 MT",
-    avgPrice: "$12.50/kg",
-    competitiveness: 85,
-    opportunity: "High",
-  },
-  {
-    country: "European Union",
-    hsCode: "030617",
-    product: "Frozen Shrimp",
-    currentTariff: "4.1%",
-    trend: "stable",
-    importVolume: "120,000 MT",
-    avgPrice: "$11.80/kg",
-    competitiveness: 78,
-    opportunity: "Medium",
-  },
-  {
-    country: "UAE",
-    hsCode: "030617",
-    product: "Frozen Shrimp",
-    currentTariff: "0%",
-    trend: "up",
-    importVolume: "25,000 MT",
-    avgPrice: "$13.20/kg",
-    competitiveness: 92,
-    opportunity: "High",
-  },
-  {
-    country: "South Korea",
-    hsCode: "030617",
-    product: "Frozen Shrimp",
-    currentTariff: "3.2%",
-    trend: "down",
-    importVolume: "32,000 MT",
-    avgPrice: "$12.10/kg",
-    competitiveness: 81,
-    opportunity: "High",
-  },
-  {
-    country: "United Kingdom",
-    hsCode: "030617",
-    product: "Frozen Shrimp",
-    currentTariff: "2.8%",
-    trend: "stable",
-    importVolume: "18,000 MT",
-    avgPrice: "$13.50/kg",
-    competitiveness: 75,
-    opportunity: "Medium",
-  },
-]
+interface TariffData {
+  country: string
+  product_code: string
+  tariff_rate: number
+  preferential_rate?: number
+  currency: string
+  last_updated: string
+}
 
-const pricingTrendsData = [
-  { month: "Jan 2024", japan: 12.2, eu: 11.5, uae: 13.0, korea: 11.8 },
-  { month: "Feb 2024", japan: 12.4, eu: 11.6, uae: 13.1, korea: 12.0 },
-  { month: "Mar 2024", japan: 12.1, eu: 11.8, uae: 13.3, korea: 12.2 },
-  { month: "Apr 2024", japan: 12.5, eu: 11.7, uae: 13.2, korea: 12.1 },
-  { month: "May 2024", japan: 12.3, eu: 11.9, uae: 13.4, korea: 12.3 },
-  { month: "Jun 2024", japan: 12.6, eu: 12.0, uae: 13.1, korea: 12.0 },
-]
+interface CommodityData {
+  commodity: string
+  price: number
+  currency: string
+  unit: string
+  change_24h: number
+  market: string
+}
 
-const demandVolumeData = [
-  { country: "Japan", volume: 45000, growth: 8.5 },
-  { country: "EU", volume: 120000, growth: 12.3 },
-  { country: "UAE", volume: 25000, growth: 15.2 },
-  { country: "Korea", volume: 32000, growth: 6.8 },
-  { country: "UK", volume: 18000, growth: 4.2 },
-]
+interface MarketDemand {
+  product: string
+  demand_score: number
+  trend: 'increasing' | 'decreasing' | 'stable'
+  key_markets: string[]
+  opportunities: string[]
+}
 
-const competitivenessData = [
-  { name: "Your Price", value: 65, color: "#2C7BE5" },
-  { name: "Market Average", value: 35, color: "#E5E7EB" },
-]
+interface CompetitivenessData {
+  overall_score: number
+  factors: {
+    price_competitiveness: number
+    quality_perception: number
+    market_access: number
+    trade_barriers: number
+  }
+  recommendations: string[]
+}
+
+interface MarketSentimentData {
+  current_sentiment: string
+  sentiment_score: number
+  safe_haven_demand: number
+  trade_recommendation: string
+  last_updated: string
+  market_factors: {
+    volatility: string
+    risk_appetite: string
+    demand_for_safe_assets: string
+  }
+}
 
 export default function MarketIntelligencePage() {
-  const [selectedHsCode, setSelectedHsCode] = useState("030617")
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([])
-  const [shortlistedMarkets, setShortlistedMarkets] = useState<string[]>([])
-  const [marketData, setMarketData] = useState<any[]>([])
+  const [tariffData, setTariffData] = useState<TariffData[]>([])
+  const [commodityData, setCommodityData] = useState<CommodityData[]>([])
+  const [marketDemand, setMarketDemand] = useState<MarketDemand[]>([])
+  const [competitiveness, setCompetitiveness] = useState<CompetitivenessData | null>(null)
+  const [marketSentiment, setMarketSentiment] = useState<MarketSentimentData | null>(null)
   const [loading, setLoading] = useState(true)
-  const { toast } = useToast()
-  const { user } = useAuth()
+  const [error, setError] = useState<string | null>(null)
+  const [selectedProduct, setSelectedProduct] = useState('textile')
 
   useEffect(() => {
-    const fetchMarketData = async () => {
-      // Don't fetch if user is not authenticated
-      if (!user) {
-        setLoading(false)
-        return
-      }
+    loadMarketData()
+  }, [selectedProduct])
 
-      try {
-        setLoading(true)
-        const response = await apiService.getMarketIntelligence()
-        
-        // Handle the structured API response
-        if (response?.success && response?.data?.tariffs) {
-          setMarketData(response.data.tariffs.map((item: any) => ({
-            ...item,
-            country: item.country,
-            hsCode: item.hsCode || "030617",
-            product: item.product || "Seafood Product",
-            currentTariff: item.tariffRate || "N/A",
-            trend: item.trend || "stable",
-            importVolume: item.importVolume || "N/A",
-            avgPrice: item.avgPrice || "N/A",
-            competitiveness: item.competitiveness || Math.round(Math.random() * 40 + 60),
-            opportunity: item.marketPotential || "Medium",
-          })))
-        } else {
-          console.warn('Unexpected API response structure:', response)
-          setMarketData(tariffData) // Fall back to sample data
-        }
-      } catch (error: any) {
-        console.error('Error fetching market intelligence:', error)
-        toast({
-          title: "Error loading market data",
-          description: "Using sample data. Please check your connection.",
-          variant: "destructive",
-        })
-        // Fall back to sample data
-        setMarketData(tariffData)
-      } finally {
-        setLoading(false)
-      }
-    }
+  const loadMarketData = async () => {
+    try {
+      setLoading(true)
+      setError(null)
 
-    fetchMarketData()
-  }, [toast, user])
+      // Load data in parallel including market sentiment
+      const [tariffs, commodities, demand, competitivenessData, sentimentData] = await Promise.all([
+        getTariffRates(selectedProduct, ['US', 'EU', 'UK', 'Japan', 'Canada']),
+        getCommodityRates(['cotton', 'rice', 'tea', 'spices', 'gold']),
+        getMarketDemand(selectedProduct),
+        calculateCompetitiveness(selectedProduct, 'India'),
+        getMarketSentiment()
+      ])
 
-  const toggleCountrySelection = (country: string) => {
-    setSelectedCountries((prev) => (prev.includes(country) ? prev.filter((c) => c !== country) : [...prev, country]))
-  }
-
-  const addToShortlist = (country: string) => {
-    if (!shortlistedMarkets.includes(country)) {
-      setShortlistedMarkets((prev) => [...prev, country])
+      setTariffData(tariffs)
+      setCommodityData(commodities)
+      setMarketDemand(demand)
+      setCompetitiveness(competitivenessData)
+      setMarketSentiment(sentimentData)
+    } catch (error) {
+      console.error('Error loading market data:', error)
+      setError('Failed to load market intelligence data. Please try again later.')
+    } finally {
+      setLoading(false)
     }
   }
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-red-500" />
-      case "down":
-        return <TrendingDown className="h-4 w-4 text-green-500" />
+      case 'increasing':
+        return <TrendingUp className="h-4 w-4 text-green-500" />
+      case 'decreasing':
+        return <TrendingDown className="h-4 w-4 text-red-500" />
       default:
-        return <div className="h-4 w-4 bg-gray-400 rounded-full" />
+        return <BarChart3 className="h-4 w-4 text-yellow-500" />
     }
   }
 
-  const getOpportunityBadge = (opportunity: string) => {
-    const variants = {
-      High: "bg-green-100 text-green-800",
-      Medium: "bg-yellow-100 text-yellow-800",
-      Low: "bg-red-100 text-red-800",
-    }
-    return <Badge className={variants[opportunity as keyof typeof variants] || variants.Low}>{opportunity}</Badge>
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return 'text-green-600'
+    if (score >= 60) return 'text-yellow-600'
+    return 'text-red-600'
   }
 
-  // Use real data if available, otherwise fallback to sample data
-  const displayData = marketData.length > 0 ? marketData : tariffData
+  const getSentimentColor = (sentiment: string) => {
+    switch (sentiment) {
+      case 'Extreme Fear':
+        return 'text-red-700 bg-red-100'
+      case 'Fear':
+        return 'text-red-600 bg-red-50'
+      case 'Neutral':
+        return 'text-gray-600 bg-gray-100'
+      case 'Greed':
+        return 'text-green-600 bg-green-50'
+      case 'Extreme Greed':
+        return 'text-green-700 bg-green-100'
+      default:
+        return 'text-gray-600 bg-gray-100'
+    }
+  }
 
-  if (loading) {
+  if (error) {
     return (
       <DashboardLayout userType="indian">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground">Loading market intelligence...</p>
-          </div>
+        <div className="p-6">
+          <Alert>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+          <Button onClick={loadMarketData} className="mt-4">
+            Retry
+          </Button>
         </div>
       </DashboardLayout>
     )
@@ -213,450 +155,411 @@ export default function MarketIntelligencePage() {
 
   return (
     <DashboardLayout userType="indian">
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Market Intelligence</h1>
-            <p className="text-muted-foreground">
-              Analyze global markets, tariffs, and opportunities for your products
-            </p>
-          </div>
-          <div className="flex space-x-2">
-            <Button variant="outline">
-              <Download className="mr-2 h-4 w-4" />
-              Export Data
-            </Button>
-            <Button>
-              <Star className="mr-2 h-4 w-4" />
-              Shortlist ({shortlistedMarkets.length})
-            </Button>
-          </div>
+      <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">Market Intelligence</h1>
+          <p className="text-muted-foreground">
+            Real-time market data, tariff rates, and competitive analysis
+          </p>
         </div>
+        <div className="flex gap-2">
+          {['textile', 'agriculture', 'manufacturing', 'services'].map((product) => (
+            <Button
+              key={product}
+              variant={selectedProduct === product ? 'default' : 'outline'}
+              onClick={() => setSelectedProduct(product)}
+              className="capitalize"
+            >
+              {product}
+            </Button>
+          ))}
+        </div>
+      </div>
 
-        {/* Filters */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Filter className="h-5 w-5" />
-              <span>Market Filters</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="hs-code">HS Code</Label>
-                <Select value={selectedHsCode} onValueChange={setSelectedHsCode}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select HS Code" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="030617">030617 - Frozen Shrimp</SelectItem>
-                    <SelectItem value="030616">030616 - Prawns</SelectItem>
-                    <SelectItem value="520100">520100 - Cotton</SelectItem>
-                    <SelectItem value="630790">630790 - Textiles</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="product">Product Category</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Categories" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="seafood">Seafood</SelectItem>
-                    <SelectItem value="textile">Textile</SelectItem>
-                    <SelectItem value="both">Both</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="region">Region</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Regions" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="asia">Asia Pacific</SelectItem>
-                    <SelectItem value="europe">Europe</SelectItem>
-                    <SelectItem value="americas">Americas</SelectItem>
-                    <SelectItem value="middle-east">Middle East</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="opportunity">Opportunity Level</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Levels" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="low">Low</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="tariffs">Tariff Rates</TabsTrigger>
+          <TabsTrigger value="commodities">Commodity Prices</TabsTrigger>
+          <TabsTrigger value="competitiveness">Competitiveness</TabsTrigger>
+        </TabsList>
 
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="tariffs" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="tariffs">Tariff Analysis</TabsTrigger>
-            <TabsTrigger value="pricing">Pricing Trends</TabsTrigger>
-            <TabsTrigger value="demand">Demand Volume</TabsTrigger>
-            <TabsTrigger value="competitiveness">Competitiveness</TabsTrigger>
-          </TabsList>
-
-          {/* Tariff Analysis Tab */}
-          <TabsContent value="tariffs" className="space-y-4">
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Tariff Comparison Table</CardTitle>
-                <CardDescription>
-                  Compare tariff rates across different markets for HS Code {selectedHsCode}
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Market Score</CardTitle>
+                <BarChart3 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Country</TableHead>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Current Tariff</TableHead>
-                      <TableHead>Trend</TableHead>
-                      <TableHead>Import Volume</TableHead>
-                      <TableHead>Avg Price</TableHead>
-                      <TableHead>Competitiveness</TableHead>
-                      <TableHead>Opportunity</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {displayData.map((row) => (
-                      <TableRow key={row.country}>
-                        <TableCell className="font-medium">{row.country}</TableCell>
-                        <TableCell>{row.product}</TableCell>
-                        <TableCell>{row.currentTariff}</TableCell>
-                        <TableCell>{getTrendIcon(row.trend)}</TableCell>
-                        <TableCell>{row.importVolume}</TableCell>
-                        <TableCell>{row.avgPrice}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-12 bg-gray-200 rounded-full h-2">
-                              <div
-                                className="bg-primary h-2 rounded-full"
-                                style={{ width: `${row.competitiveness}%` }}
-                              />
-                            </div>
-                            <span className="text-sm">{row.competitiveness}%</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>{getOpportunityBadge(row.opportunity)}</TableCell>
-                        <TableCell>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => addToShortlist(row.country)}
-                            disabled={shortlistedMarkets.includes(row.country)}
-                          >
-                            {shortlistedMarkets.includes(row.country) ? "Added" : "Shortlist"}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Pricing Trends Tab */}
-          <TabsContent value="pricing" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Price Trends Analysis</CardTitle>
-                <CardDescription>Historical pricing trends across key markets (USD per kg)</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={pricingTrendsData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="japan" stroke="#2C7BE5" strokeWidth={2} name="Japan" />
-                      <Line type="monotone" dataKey="eu" stroke="#10B981" strokeWidth={2} name="European Union" />
-                      <Line type="monotone" dataKey="uae" stroke="#F59E0B" strokeWidth={2} name="UAE" />
-                      <Line type="monotone" dataKey="korea" stroke="#EF4444" strokeWidth={2} name="South Korea" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
+                {loading ? (
+                  <Skeleton className="h-8 w-16" />
+                ) : (
+                  <div className="text-2xl font-bold text-green-600">
+                    {competitiveness?.overall_score || 0}/100
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground">Overall competitiveness</p>
               </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
-                    <span>Price Insights</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="p-3 bg-green-50 rounded-lg">
-                    <p className="text-sm font-medium text-green-800">Highest Price Market</p>
-                    <p className="text-lg font-bold text-green-900">UAE - $13.40/kg</p>
-                    <p className="text-xs text-green-700">+2.3% from last month</p>
-                  </div>
-                  <div className="p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm font-medium text-blue-800">Most Stable Market</p>
-                    <p className="text-lg font-bold text-blue-900">European Union</p>
-                    <p className="text-xs text-blue-700">Low volatility, steady demand</p>
-                  </div>
-                  <div className="p-3 bg-yellow-50 rounded-lg">
-                    <p className="text-sm font-medium text-yellow-800">Growth Opportunity</p>
-                    <p className="text-lg font-bold text-yellow-900">South Korea</p>
-                    <p className="text-xs text-yellow-700">Emerging demand, competitive pricing</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Price Forecast</CardTitle>
-                  <CardDescription>Expected price movements (next 3 months)</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
-                    <span className="text-sm">Japan</span>
-                    <div className="flex items-center space-x-2">
-                      <TrendingUp className="h-4 w-4 text-green-500" />
-                      <span className="text-sm font-medium">+3.2%</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
-                    <span className="text-sm">European Union</span>
-                    <div className="flex items-center space-x-2">
-                      <TrendingUp className="h-4 w-4 text-green-500" />
-                      <span className="text-sm font-medium">+1.8%</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
-                    <span className="text-sm">UAE</span>
-                    <div className="flex items-center space-x-2">
-                      <div className="h-4 w-4 bg-gray-400 rounded-full" />
-                      <span className="text-sm font-medium">Stable</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
-                    <span className="text-sm">South Korea</span>
-                    <div className="flex items-center space-x-2">
-                      <TrendingDown className="h-4 w-4 text-red-500" />
-                      <span className="text-sm font-medium">-1.5%</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Demand Volume Tab */}
-          <TabsContent value="demand" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Import Demand by Market</CardTitle>
-                <CardDescription>Annual import volumes and growth rates</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Avg Tariff</CardTitle>
+                <Globe className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={demandVolumeData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="country" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="volume" fill="#2C7BE5" name="Import Volume (MT)" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
+                {loading ? (
+                  <Skeleton className="h-8 w-16" />
+                ) : (
+                  <div className="text-2xl font-bold">
+                    {tariffData.length > 0 
+                      ? `${(tariffData.reduce((acc, t) => acc + t.tariff_rate, 0) / tariffData.length).toFixed(1)}%`
+                      : '0%'
+                    }
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground">Across major markets</p>
               </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-2">
-                    <Package className="h-8 w-8 text-primary" />
-                    <div>
-                      <p className="text-2xl font-bold">240,000 MT</p>
-                      <p className="text-sm text-muted-foreground">Total Market Size</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-2">
-                    <TrendingUp className="h-8 w-8 text-green-500" />
-                    <div>
-                      <p className="text-2xl font-bold">9.4%</p>
-                      <p className="text-sm text-muted-foreground">Average Growth Rate</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-2">
-                    <Target className="h-8 w-8 text-blue-500" />
-                    <div>
-                      <p className="text-2xl font-bold">15%</p>
-                      <p className="text-sm text-muted-foreground">Market Share Potential</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Competitiveness Tab */}
-          <TabsContent value="competitiveness" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Your Competitiveness Score</CardTitle>
-                  <CardDescription>How your pricing compares to market average</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={competitivenessData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={100}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {competitivenessData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-primary">82/100</p>
-                    <p className="text-sm text-muted-foreground">Competitiveness Score</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Competitive Analysis</CardTitle>
-                  <CardDescription>Key factors affecting your market position</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Price Competitiveness</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-20 bg-gray-200 rounded-full h-2">
-                          <div className="bg-green-500 h-2 rounded-full" style={{ width: "85%" }} />
-                        </div>
-                        <span className="text-sm">85%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Quality Standards</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-20 bg-gray-200 rounded-full h-2">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "92%" }} />
-                        </div>
-                        <span className="text-sm">92%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Delivery Speed</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-20 bg-gray-200 rounded-full h-2">
-                          <div className="bg-yellow-500 h-2 rounded-full" style={{ width: "78%" }} />
-                        </div>
-                        <span className="text-sm">78%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Certification</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-20 bg-gray-200 rounded-full h-2">
-                          <div className="bg-green-500 h-2 rounded-full" style={{ width: "88%" }} />
-                        </div>
-                        <span className="text-sm">88%</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t">
-                    <h4 className="font-medium mb-2">Recommendations</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• Improve delivery speed to match UAE standards</li>
-                      <li>• Consider premium pricing in Japan market</li>
-                      <li>• Leverage quality advantage in EU market</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
             <Card>
-              <CardHeader>
-                <CardTitle>Market Shortlist</CardTitle>
-                <CardDescription>
-                  {shortlistedMarkets.length > 0
-                    ? `You have shortlisted ${shortlistedMarkets.length} markets`
-                    : "Add markets to your shortlist for detailed analysis"}
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Price Trend</CardTitle>
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                {shortlistedMarkets.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {shortlistedMarkets.map((market) => {
-                      const marketInfo = displayData.find((d) => d.country === market)
-                      return (
-                        <div key={market} className="p-4 border rounded-lg">
-                          <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-medium">{market}</h4>
-                            {getOpportunityBadge(marketInfo?.opportunity || "Medium")}
-                          </div>
-                          <div className="space-y-1 text-sm text-muted-foreground">
-                            <p>Tariff: {marketInfo?.currentTariff}</p>
-                            <p>Volume: {marketInfo?.importVolume}</p>
-                            <p>Price: {marketInfo?.avgPrice}</p>
-                          </div>
-                        </div>
-                      )
-                    })}
+                {loading ? (
+                  <Skeleton className="h-8 w-16" />
+                ) : (
+                  <div className="text-2xl font-bold text-green-600">+12.5%</div>
+                )}
+                <p className="text-xs text-muted-foreground">Last 30 days</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Market Sentiment</CardTitle>
+                <Brain className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <Skeleton className="h-8 w-20" />
+                ) : marketSentiment ? (
+                  <div className="space-y-1">
+                    <div className={`text-lg font-bold px-2 py-1 rounded text-center ${getSentimentColor(marketSentiment.current_sentiment)}`}>
+                      {marketSentiment.current_sentiment}
+                    </div>
+                    <div className="text-sm text-center text-muted-foreground">
+                      Score: {marketSentiment.sentiment_score}/100
+                    </div>
                   </div>
                 ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Globe className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No markets shortlisted yet</p>
-                    <p className="text-sm">Go to Tariff Analysis tab to add markets to your shortlist</p>
+                  <div className="text-lg font-bold text-gray-600">N/A</div>
+                )}
+                <p className="text-xs text-muted-foreground">Fear & Greed Index</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Market Demand Analysis</CardTitle>
+                <CardDescription>
+                  Demand trends and opportunities for {selectedProduct}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <Skeleton key={i} className="h-20 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {marketDemand.map((demand, index) => (
+                      <div key={index} className="border rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-semibold">{demand.product}</h4>
+                          <div className="flex items-center gap-2">
+                            {getTrendIcon(demand.trend)}
+                            <Badge variant="outline">{demand.trend}</Badge>
+                          </div>
+                        </div>
+                        <div className="mb-2">
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>Demand Score</span>
+                            <span>{demand.demand_score}/100</span>
+                          </div>
+                          <Progress value={demand.demand_score} className="h-2" />
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          <p><strong>Key Markets:</strong> {demand.key_markets.join(', ')}</p>
+                          <p><strong>Opportunities:</strong> {demand.opportunities.join(', ')}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Market Sentiment Analysis</CardTitle>
+                <CardDescription>
+                  Real-time market psychology and risk indicators
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <Skeleton key={i} className="h-16 w-full" />
+                    ))}
+                  </div>
+                ) : marketSentiment ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center">
+                        <div className={`text-2xl font-bold px-3 py-2 rounded ${getSentimentColor(marketSentiment.current_sentiment)}`}>
+                          {marketSentiment.current_sentiment}
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">Current Sentiment</p>
+                        <p className="text-xs text-muted-foreground">Score: {marketSentiment.sentiment_score}/100</p>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600">
+                          {marketSentiment.safe_haven_demand.toFixed(0)}%
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">Safe Haven Demand</p>
+                        <p className="text-xs text-muted-foreground">Risk Appetite Indicator</p>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-3">
+                      <h5 className="font-semibold mb-2 flex items-center gap-2">
+                        <Activity className="h-4 w-4" />
+                        Market Factors
+                      </h5>
+                      <div className="grid grid-cols-3 gap-2 text-sm">
+                        <div className="text-center p-2 bg-muted/30 rounded">
+                          <div className="font-medium">{marketSentiment.market_factors.volatility}</div>
+                          <div className="text-xs text-muted-foreground">Volatility</div>
+                        </div>
+                        <div className="text-center p-2 bg-muted/30 rounded">
+                          <div className="font-medium">{marketSentiment.market_factors.risk_appetite}</div>
+                          <div className="text-xs text-muted-foreground">Risk Appetite</div>
+                        </div>
+                        <div className="text-center p-2 bg-muted/30 rounded">
+                          <div className="font-medium">{marketSentiment.market_factors.demand_for_safe_assets}</div>
+                          <div className="text-xs text-muted-foreground">Safe Assets</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-3">
+                      <h5 className="font-semibold mb-2">Trade Recommendation:</h5>
+                      <p className="text-sm bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        {marketSentiment.trade_recommendation}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Last updated: {new Date(marketSentiment.last_updated).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">No sentiment data available</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="tariffs" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Live Tariff Rates</CardTitle>
+              <CardDescription>
+                Current tariff rates for {selectedProduct} across major markets
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Skeleton key={i} className="h-16 w-full" />
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {tariffData.map((tariff, index) => (
+                    <div key={index} className="border rounded-lg p-4 flex justify-between items-center">
+                      <div>
+                        <h4 className="font-semibold">{tariff.country}</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Product Code: {tariff.product_code}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Updated: {new Date(tariff.last_updated).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold">
+                          {tariff.tariff_rate}%
+                        </div>
+                        {tariff.preferential_rate && (
+                          <div className="text-sm text-green-600">
+                            Preferential: {tariff.preferential_rate}%
+                          </div>
+                        )}
+                        <div className="text-xs text-muted-foreground">
+                          {tariff.currency}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {tariffData.length === 0 && (
+                    <p className="text-center text-muted-foreground py-8">
+                      No tariff data available. Check your RapidAPI configuration.
+                    </p>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="commodities" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Commodity Prices</CardTitle>
+              <CardDescription>
+                Real-time commodity pricing data
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <Skeleton key={i} className="h-32 w-full" />
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {commodityData.map((commodity, index) => (
+                    <Card key={index}>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg capitalize">{commodity.commodity}</CardTitle>
+                        <CardDescription>{commodity.market}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">
+                          {commodity.currency} {commodity.price.toFixed(2)}
+                        </div>
+                        <div className="text-sm text-muted-foreground mb-2">
+                          per {commodity.unit}
+                        </div>
+                        <div className={`flex items-center gap-1 text-sm ${
+                          commodity.change_24h >= 0 ? 'text-green-600' : 'text-red-600'
+                        }`}>
+                          {commodity.change_24h >= 0 ? 
+                            <TrendingUp className="h-3 w-3" /> : 
+                            <TrendingDown className="h-3 w-3" />
+                          }
+                          {commodity.change_24h >= 0 ? '+' : ''}{commodity.change_24h.toFixed(2)}% (24h)
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  {commodityData.length === 0 && (
+                    <div className="col-span-full text-center text-muted-foreground py-8">
+                      No commodity data available. Check your RapidAPI configuration.
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="competitiveness" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Competitiveness Score</CardTitle>
+                <CardDescription>
+                  AI-powered analysis of your market position
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <Skeleton className="h-48 w-full" />
+                ) : competitiveness ? (
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <div className={`text-6xl font-bold ${getScoreColor(competitiveness.overall_score)}`}>
+                        {competitiveness.overall_score}
+                      </div>
+                      <p className="text-muted-foreground">Overall Competitiveness</p>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {Object.entries(competitiveness.factors).map(([factor, score]) => (
+                        <div key={factor} className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="capitalize font-medium">
+                              {factor.replace('_', ' ')}
+                            </span>
+                            <span className={`font-bold ${getScoreColor(score)}`}>
+                              {score}/100
+                            </span>
+                          </div>
+                          <Progress value={score} className="h-3" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">No competitiveness data available</p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Strategic Recommendations</CardTitle>
+                <CardDescription>
+                  AI-generated insights to improve your market position
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Skeleton key={i} className="h-12 w-full" />
+                    ))}
+                  </div>
+                ) : competitiveness?.recommendations ? (
+                  <div className="space-y-4">
+                    {competitiveness.recommendations.map((recommendation, index) => (
+                      <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
+                        <p className="text-sm">{recommendation}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">No recommendations available</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
       </div>
     </DashboardLayout>
   )

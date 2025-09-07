@@ -3,8 +3,14 @@ const Joi = require('joi');
 const { ObjectId } = require('mongodb');
 const { getDB } = require('../config/database');
 const logger = require('../config/logger');
+const Post = require('../models/Post');
+const Comment = require('../models/Comment');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
+
+// Apply authentication middleware to all routes
+router.use(auth);
 
 // Validation schemas
 const postSchema = Joi.object({
@@ -14,8 +20,9 @@ const postSchema = Joi.object({
   tags: Joi.array().items(Joi.string().max(50)).max(10).optional()
 });
 
-const replySchema = Joi.object({
-  content: Joi.string().min(5).max(2000).required()
+const commentSchema = Joi.object({
+  content: Joi.string().min(5).max(2000).required(),
+  parentCommentId: Joi.string().optional()
 });
 
 // @route   GET /api/forum/posts
@@ -23,75 +30,20 @@ const replySchema = Joi.object({
 // @access  Private
 router.get('/posts', async (req, res) => {
   try {
-    const { 
-      category = 'All',
-      search = '',
-      page = 1,
-      limit = 20,
-      sortBy = 'createdAt',
-      sortOrder = 'desc'
-    } = req.query;
+    const options = {
+      category: req.query.category || 'All',
+      search: req.query.search || '',
+      page: parseInt(req.query.page) || 1,
+      limit: parseInt(req.query.limit) || 20,
+      sortBy: req.query.sortBy || 'createdAt',
+      sortOrder: req.query.sortOrder || 'desc',
+      featured: req.query.featured === 'true'
+    };
 
     const db = getDB();
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const result = await Post.getAll(db, options);
 
-    // Build filter
-    let filter = {};
-    if (category && category !== 'All') {
-      filter.category = category;
-    }
-    if (search) {
-      filter.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { content: { $regex: search, $options: 'i' } },
-        { tags: { $elemMatch: { $regex: search, $options: 'i' } } }
-      ];
-    }
-
-    // Build sort
-    const sort = {};
-    sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-
-    // Get posts with user details
-    const posts = await db.collection('forumPosts')
-      .aggregate([
-        { $match: filter },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user'
-          }
-        },
-        { $unwind: '$user' },
-        { $sort: sort },
-        { $skip: skip },
-        { $limit: parseInt(limit) },
-        {
-          $project: {
-            title: 1,
-            content: 1,
-            category: 1,
-            tags: 1,
-            likes: 1,
-            commentsCount: 1,
-            isAnswered: 1,
-            isPinned: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            'user.contactPerson': 1,
-            'user.companyName': 1,
-            'user.role': 1
-          }
-        }
-      ])
-      .toArray();
-
-    // Get total count
-    const totalCount = await db.collection('forumPosts').countDocuments(filter);
-
-    const formattedPosts = posts.map(post => ({
+    const formattedPosts = result.posts.map(post => ({
       id: post._id,
       title: post.title,
       content: post.content.substring(0, 200) + (post.content.length > 200 ? '...' : ''),
@@ -101,28 +53,33 @@ router.get('/posts', async (req, res) => {
       commentsCount: post.commentsCount || 0,
       isAnswered: post.isAnswered || false,
       isPinned: post.isPinned || false,
+      isFeatured: post.isFeatured || false,
       createdAt: post.createdAt,
+      timeAgo: getTimeAgo(post.createdAt),
+      isLiked: post.likedBy ? post.likedBy.some(id => id.equals(new ObjectId(req.user._id))) : false,
       author: {
         name: post.user.contactPerson,
         company: post.user.companyName,
-        role: post.user.role
+        role: post.user.role,
+        sector: post.user.sector,
+        avatar: `/api/users/${post.userId}/avatar`
       }
     }));
 
     const pagination = {
-      currentPage: parseInt(page),
-      totalPages: Math.ceil(totalCount / parseInt(limit)),
-      totalRecords: totalCount,
-      hasNext: parseInt(page) < Math.ceil(totalCount / parseInt(limit)),
-      hasPrev: parseInt(page) > 1
+      currentPage: result.currentPage,
+      totalPages: result.totalPages,
+      totalRecords: result.totalCount,
+      hasNext: result.currentPage < result.totalPages,
+      hasPrev: result.currentPage > 1
     };
 
     res.json({
       success: true,
       data: {
-        posts: formattedPosts
-      },
-      pagination
+        posts: formattedPosts,
+        pagination
+      }
     });
 
   } catch (error) {
@@ -148,33 +105,18 @@ router.post('/posts', async (req, res) => {
       });
     }
 
-    const { title, content, category, tags = [] } = value;
     const db = getDB();
+    const post = await Post.create(db, value, req.user._id);
 
-    const post = {
-      userId: new ObjectId(req.user._id),
-      title,
-      content,
-      category,
-      tags,
-      likes: 0,
-      commentsCount: 0,
-      isAnswered: false,
-      isPinned: false,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    const result = await db.collection('forumPosts').insertOne(post);
-
-    logger.info(`User ${req.user._id} created forum post: ${title}`);
+    logger.info(`User ${req.user._id} created forum post: ${value.title}`);
 
     res.status(201).json({
       success: true,
       message: 'Post created successfully',
       data: {
-        id: result.insertedId,
-        ...post
+        id: post._id,
+        title: post.title,
+        category: post.category
       }
     });
 
@@ -182,42 +124,20 @@ router.post('/posts', async (req, res) => {
     logger.error('Create forum post error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: error.message || 'Internal server error'
     });
   }
 });
 
 // @route   GET /api/forum/posts/:id
-// @desc    Get single forum post with replies
+// @desc    Get single forum post with comments
 // @access  Private
 router.get('/posts/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const db = getDB();
 
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid post ID'
-      });
-    }
-
-    // Get post with user details
-    const post = await db.collection('forumPosts')
-      .aggregate([
-        { $match: { _id: new ObjectId(id) } },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user'
-          }
-        },
-        { $unwind: '$user' }
-      ])
-      .next();
-
+    const post = await Post.getById(db, id);
     if (!post) {
       return res.status(404).json({
         success: false,
@@ -225,22 +145,8 @@ router.get('/posts/:id', async (req, res) => {
       });
     }
 
-    // Get replies with user details
-    const replies = await db.collection('forumReplies')
-      .aggregate([
-        { $match: { postId: new ObjectId(id) } },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user'
-          }
-        },
-        { $unwind: '$user' },
-        { $sort: { createdAt: 1 } }
-      ])
-      .toArray();
+    // Get comments for this post
+    const commentsResult = await Comment.getByPostId(db, id);
 
     const formattedPost = {
       id: post._id,
@@ -252,24 +158,51 @@ router.get('/posts/:id', async (req, res) => {
       commentsCount: post.commentsCount || 0,
       isAnswered: post.isAnswered || false,
       isPinned: post.isPinned || false,
+      isFeatured: post.isFeatured || false,
       createdAt: post.createdAt,
+      timeAgo: getTimeAgo(post.createdAt),
+      isLiked: post.likedBy ? post.likedBy.some(id => id.equals(new ObjectId(req.user._id))) : false,
+      isOwner: post.userId.equals(new ObjectId(req.user._id)),
       author: {
         name: post.user.contactPerson,
         company: post.user.companyName,
-        role: post.user.role
+        role: post.user.role,
+        sector: post.user.sector,
+        avatar: `/api/users/${post.userId}/avatar`
       },
-      replies: replies.map(reply => ({
-        id: reply._id,
-        content: reply.content,
-        likes: reply.likes || 0,
-        isMentorReply: reply.isMentorReply || false,
-        isAcceptedAnswer: reply.isAcceptedAnswer || false,
-        createdAt: reply.createdAt,
+      comments: commentsResult.comments.map(comment => ({
+        id: comment._id,
+        content: comment.content,
+        likes: comment.likes || 0,
+        isMentorReply: comment.isMentorReply || false,
+        isAcceptedAnswer: comment.isAcceptedAnswer || false,
+        createdAt: comment.createdAt,
+        timeAgo: getTimeAgo(comment.createdAt),
+        isLiked: comment.likedBy ? comment.likedBy.some(id => id.equals(new ObjectId(req.user._id))) : false,
+        isOwner: comment.userId.equals(new ObjectId(req.user._id)),
         author: {
-          name: reply.user.contactPerson,
-          company: reply.user.companyName,
-          role: reply.user.role
-        }
+          name: comment.user.contactPerson,
+          company: comment.user.companyName,
+          role: comment.user.role,
+          sector: comment.user.sector,
+          avatar: `/api/users/${comment.userId}/avatar`
+        },
+        replies: comment.replies ? comment.replies.map(reply => ({
+          id: reply._id,
+          content: reply.content,
+          likes: reply.likes || 0,
+          createdAt: reply.createdAt,
+          timeAgo: getTimeAgo(reply.createdAt),
+          isLiked: reply.likedBy ? reply.likedBy.some(id => id.equals(new ObjectId(req.user._id))) : false,
+          isOwner: reply.userId.equals(new ObjectId(req.user._id)),
+          author: {
+            name: reply.user.contactPerson,
+            company: reply.user.companyName,
+            role: reply.user.role,
+            sector: reply.user.sector,
+            avatar: `/api/users/${reply.userId}/avatar`
+          }
+        })) : []
       }))
     };
 
@@ -282,27 +215,20 @@ router.get('/posts/:id', async (req, res) => {
     logger.error('Get forum post error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: error.message || 'Internal server error'
     });
   }
 });
 
-// @route   POST /api/forum/posts/:id/replies
-// @desc    Add reply to forum post
+// @route   POST /api/forum/posts/:id/comments
+// @desc    Add comment to forum post
 // @access  Private
-router.post('/posts/:id/replies', async (req, res) => {
+router.post('/posts/:id/comments', async (req, res) => {
   try {
     const { id } = req.params;
     
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid post ID'
-      });
-    }
-
     // Validate input
-    const { error, value } = replySchema.validate(req.body);
+    const { error, value } = commentSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         success: false,
@@ -310,52 +236,31 @@ router.post('/posts/:id/replies', async (req, res) => {
       });
     }
 
-    const { content } = value;
     const db = getDB();
-
-    // Check if post exists
-    const post = await db.collection('forumPosts').findOne({ _id: new ObjectId(id) });
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: 'Post not found'
-      });
-    }
-
-    const reply = {
-      postId: new ObjectId(id),
-      userId: new ObjectId(req.user._id),
-      content,
-      likes: 0,
-      isMentorReply: false, // Could be determined based on user role
-      isAcceptedAnswer: false,
-      createdAt: new Date()
+    const commentData = {
+      ...value,
+      postId: id
     };
 
-    const result = await db.collection('forumReplies').insertOne(reply);
+    const comment = await Comment.create(db, commentData, req.user._id);
 
-    // Update comments count on post
-    await db.collection('forumPosts').updateOne(
-      { _id: new ObjectId(id) },
-      { $inc: { commentsCount: 1 } }
-    );
-
-    logger.info(`User ${req.user._id} replied to forum post ${id}`);
+    logger.info(`User ${req.user._id} commented on forum post ${id}`);
 
     res.status(201).json({
       success: true,
-      message: 'Reply added successfully',
+      message: 'Comment added successfully',
       data: {
-        id: result.insertedId,
-        ...reply
+        id: comment._id,
+        content: comment.content,
+        createdAt: comment.createdAt
       }
     });
 
   } catch (error) {
-    logger.error('Add forum reply error:', error);
+    logger.error('Add forum comment error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: error.message || 'Internal server error'
     });
   }
 });
@@ -368,39 +273,332 @@ router.post('/posts/:id/like', async (req, res) => {
     const { id } = req.params;
     const db = getDB();
 
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid post ID'
-      });
-    }
-
-    // For simplicity, just increment likes count
-    // In a real app, you'd track individual user likes to prevent multiple likes
-    const result = await db.collection('forumPosts').updateOne(
-      { _id: new ObjectId(id) },
-      { $inc: { likes: 1 } }
-    );
-
-    if (result.matchedCount === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'Post not found'
-      });
-    }
+    const isLiked = await Post.toggleLike(db, id, req.user._id);
 
     res.json({
       success: true,
-      message: 'Post liked successfully'
+      message: isLiked ? 'Post liked successfully' : 'Post unliked successfully',
+      data: {
+        isLiked
+      }
     });
 
   } catch (error) {
     logger.error('Like post error:', error);
     res.status(500).json({
       success: false,
+      message: error.message || 'Internal server error'
+    });
+  }
+});
+
+// @route   POST /api/forum/comments/:id/like
+// @desc    Like/unlike a comment
+// @access  Private
+router.post('/comments/:id/like', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = getDB();
+
+    const isLiked = await Comment.toggleLike(db, id, req.user._id);
+
+    res.json({
+      success: true,
+      message: isLiked ? 'Comment liked successfully' : 'Comment unliked successfully',
+      data: {
+        isLiked
+      }
+    });
+
+  } catch (error) {
+    logger.error('Like comment error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Internal server error'
+    });
+  }
+});
+
+// @route   PUT /api/forum/posts/:id
+// @desc    Update a forum post
+// @access  Private
+router.put('/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Validate input
+    const { error, value } = postSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message
+      });
+    }
+
+    const db = getDB();
+    await Post.update(db, id, value, req.user._id);
+
+    logger.info(`User ${req.user._id} updated forum post ${id}`);
+
+    res.json({
+      success: true,
+      message: 'Post updated successfully'
+    });
+
+  } catch (error) {
+    logger.error('Update forum post error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Internal server error'
+    });
+  }
+});
+
+// @route   DELETE /api/forum/posts/:id
+// @desc    Delete a forum post
+// @access  Private
+router.delete('/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = getDB();
+
+    await Post.delete(db, id, req.user._id);
+
+    logger.info(`User ${req.user._id} deleted forum post ${id}`);
+
+    res.json({
+      success: true,
+      message: 'Post deleted successfully'
+    });
+
+  } catch (error) {
+    logger.error('Delete forum post error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Internal server error'
+    });
+  }
+});
+
+// @route   PUT /api/forum/comments/:id
+// @desc    Update a comment
+// @access  Private
+router.put('/comments/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    if (!content || content.length < 5 || content.length > 2000) {
+      return res.status(400).json({
+        success: false,
+        message: 'Comment content must be between 5 and 2000 characters'
+      });
+    }
+
+    const db = getDB();
+    await Comment.update(db, id, { content }, req.user._id);
+
+    logger.info(`User ${req.user._id} updated comment ${id}`);
+
+    res.json({
+      success: true,
+      message: 'Comment updated successfully'
+    });
+
+  } catch (error) {
+    logger.error('Update comment error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Internal server error'
+    });
+  }
+});
+
+// @route   DELETE /api/forum/comments/:id
+// @desc    Delete a comment
+// @access  Private
+router.delete('/comments/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = getDB();
+
+    await Comment.delete(db, id, req.user._id);
+
+    logger.info(`User ${req.user._id} deleted comment ${id}`);
+
+    res.json({
+      success: true,
+      message: 'Comment deleted successfully'
+    });
+
+  } catch (error) {
+    logger.error('Delete comment error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Internal server error'
+    });
+  }
+});
+
+// @route   POST /api/forum/comments/:id/accept
+// @desc    Mark comment as accepted answer
+// @access  Private
+router.post('/comments/:id/accept', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = getDB();
+
+    await Comment.markAsAccepted(db, id, req.user._id);
+
+    logger.info(`User ${req.user._id} marked comment ${id} as accepted answer`);
+
+    res.json({
+      success: true,
+      message: 'Answer marked as accepted successfully'
+    });
+
+  } catch (error) {
+    logger.error('Accept answer error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Internal server error'
+    });
+  }
+});
+
+// @route   GET /api/forum/stats
+// @desc    Get community statistics
+// @access  Private
+router.get('/stats', async (req, res) => {
+  try {
+    const db = getDB();
+    const stats = await Post.getStats(db);
+
+    // Count category distribution
+    const categoryStats = {};
+    stats.categoryCounts.forEach(category => {
+      categoryStats[category] = (categoryStats[category] || 0) + 1;
+    });
+
+    res.json({
+      success: true,
+      data: {
+        totalPosts: stats.totalPosts,
+        totalLikes: stats.totalLikes,
+        totalComments: stats.totalComments,
+        activeMembers: stats.activeUsers,
+        categoryDistribution: categoryStats
+      }
+    });
+
+  } catch (error) {
+    logger.error('Get forum stats error:', error);
+    res.status(500).json({
+      success: false,
       message: 'Internal server error'
     });
   }
 });
+
+// @route   GET /api/forum/categories
+// @desc    Get available categories with counts
+// @access  Private
+router.get('/categories', async (req, res) => {
+  try {
+    const db = getDB();
+    
+    const categories = await db.collection('forumPosts').aggregate([
+      { $match: { isHidden: { $ne: true } } },
+      { $group: { _id: '$category', count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]).toArray();
+
+    const formattedCategories = categories.map(cat => ({
+      name: cat._id,
+      count: cat.count
+    }));
+
+    res.json({
+      success: true,
+      data: formattedCategories
+    });
+
+  } catch (error) {
+    logger.error('Get categories error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+// @route   GET /api/forum/my-posts
+// @desc    Get current user's posts
+// @access  Private
+router.get('/my-posts', async (req, res) => {
+  try {
+    const options = {
+      page: parseInt(req.query.page) || 1,
+      limit: parseInt(req.query.limit) || 10,
+      sortBy: req.query.sortBy || 'createdAt',
+      sortOrder: req.query.sortOrder || 'desc'
+    };
+
+    const db = getDB();
+    const filter = { userId: new ObjectId(req.user._id), isHidden: { $ne: true } };
+
+    const posts = await db.collection('forumPosts')
+      .find(filter)
+      .sort({ [options.sortBy]: options.sortOrder === 'desc' ? -1 : 1 })
+      .skip((options.page - 1) * options.limit)
+      .limit(options.limit)
+      .toArray();
+
+    const totalCount = await db.collection('forumPosts').countDocuments(filter);
+
+    const formattedPosts = posts.map(post => ({
+      id: post._id,
+      title: post.title,
+      category: post.category,
+      likes: post.likes || 0,
+      commentsCount: post.commentsCount || 0,
+      isAnswered: post.isAnswered || false,
+      createdAt: post.createdAt,
+      timeAgo: getTimeAgo(post.createdAt)
+    }));
+
+    res.json({
+      success: true,
+      data: {
+        posts: formattedPosts,
+        pagination: {
+          currentPage: options.page,
+          totalPages: Math.ceil(totalCount / options.limit),
+          totalRecords: totalCount
+        }
+      }
+    });
+
+  } catch (error) {
+    logger.error('Get user posts error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+// Helper function to format time ago
+function getTimeAgo(date) {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
+  
+  if (diffInSeconds < 60) return 'Just now';
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+  return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+}
 
 module.exports = router;

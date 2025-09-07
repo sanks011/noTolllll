@@ -22,6 +22,7 @@ const forumRoutes = require('./routes/forum');
 const impactRoutes = require('./routes/impact');
 const uploadRoutes = require('./routes/upload');
 const dashboardRoutes = require('./routes/dashboard');
+const tradeRoutes = require('./routes/trade');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -95,6 +96,7 @@ app.use('/api/forum', authMiddleware, forumRoutes);
 app.use('/api/impact', authMiddleware, impactRoutes);
 app.use('/api/upload', authMiddleware, uploadRoutes);
 app.use('/api/dashboard', authMiddleware, dashboardRoutes);
+app.use('/api/trade', authMiddleware, tradeRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {

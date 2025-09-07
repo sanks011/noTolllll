@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,7 @@ import { useToast } from "@/hooks/use-toast"
 import { apiService } from "@/lib/api"
 import { useAuth } from "@/contexts/AuthContext"
 import { externalApiService } from "@/lib/external-apis"
+import PotentialBuyersComponent from "@/components/PotentialBuyersComponent"
 
 // Note: Sample data removed - now using real AI-generated buyer data
 //   {
@@ -416,55 +418,69 @@ export default function BuyersPage() {
           </div>
         </div>
 
-        {/* AI Market Insights */}
-        {(aiInsights || marketNews.length > 0) && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {aiInsights && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    AI Market Insights
-                  </CardTitle>
-                  <CardDescription>Real-time analysis powered by Groq AI</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-sm space-y-2">
-                    <p>{aiInsights}</p>
-                    <div className="pt-2">
-                      <Badge variant="secondary" className="text-xs">
-                        <BarChart className="h-3 w-3 mr-1" />
-                        AI Generated
-                      </Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-            
-            {marketNews.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Globe className="h-5 w-5" />
-                    Latest Trade News
-                  </CardTitle>
-                  <CardDescription>Real-time news from News API</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {marketNews.slice(0, 3).map((article, index) => (
-                      <div key={index} className="border-b pb-2 last:border-b-0">
-                        <h5 className="text-sm font-medium line-clamp-2">{article.title}</h5>
-                        <p className="text-xs text-muted-foreground mt-1">{article.source} • {new Date(article.publishedAt).toLocaleDateString()}</p>
+        {/* Tabs for organizing different buyer views */}
+        <Tabs defaultValue="directory" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="directory" className="flex items-center gap-2">
+              <Search className="h-4 w-4" />
+              Buyer Directory
+            </TabsTrigger>
+            <TabsTrigger value="potential" className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              Potential Buyers
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="directory" className="space-y-6">
+            {/* AI Market Insights */}
+            {(aiInsights || marketNews.length > 0) && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {aiInsights && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <TrendingUp className="h-5 w-5" />
+                        AI Market Insights
+                      </CardTitle>
+                      <CardDescription>Real-time analysis powered by Groq AI</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-sm space-y-2">
+                        <p>{aiInsights}</p>
+                        <div className="pt-2">
+                          <Badge variant="secondary" className="text-xs">
+                            <BarChart className="h-3 w-3 mr-1" />
+                            AI Generated
+                          </Badge>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
+                )}
+                
+                {marketNews.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Globe className="h-5 w-5" />
+                        Latest Trade News
+                      </CardTitle>
+                      <CardDescription>Real-time news from News API</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {marketNews.slice(0, 3).map((article, index) => (
+                          <div key={index} className="border-b pb-2 last:border-b-0">
+                            <h5 className="text-sm font-medium line-clamp-2">{article.title}</h5>
+                            <p className="text-xs text-muted-foreground mt-1">{article.source} • {new Date(article.publishedAt).toLocaleDateString()}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             )}
-          </div>
-        )}
 
         {/* Search and Filters */}
         <Card>
@@ -763,6 +779,12 @@ export default function BuyersPage() {
             )}
           </CardContent>
         </Card>
+          </TabsContent>
+
+          <TabsContent value="potential" className="space-y-6">
+            <PotentialBuyersComponent />
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   )

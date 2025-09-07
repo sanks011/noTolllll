@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import { AlertCircle, TrendingUp, Package, Users, Globe, IndianRupee, FileText, Bell } from 'lucide-react'
 import { externalApiService } from '@/lib/external-apis'
+import TradeIntelligencePanel from '@/components/TradeIntelligencePanel'
 
 interface DashboardData {
   overview: {
@@ -372,6 +373,7 @@ export default function IndianTraderDashboard() {
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="buyers">Buyer Recommendations</TabsTrigger>
+            <TabsTrigger value="trade-intelligence">Trade Intelligence</TabsTrigger>
             <TabsTrigger value="compliance">Compliance</TabsTrigger>
             <TabsTrigger value="news">Trade News</TabsTrigger>
           </TabsList>
@@ -516,6 +518,10 @@ export default function IndianTraderDashboard() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="trade-intelligence" className="space-y-4">
+            <TradeIntelligencePanel />
           </TabsContent>
 
           <TabsContent value="news" className="space-y-4">
