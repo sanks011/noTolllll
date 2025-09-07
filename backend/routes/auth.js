@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const User = require('../models/User');
+const { authMiddleware } = require('../middleware/auth');
 const logger = require('../config/logger');
 
 const router = express.Router();
@@ -172,6 +173,39 @@ router.post('/signin', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Internal server error'
+    });
+  }
+});
+
+// @route   GET /api/auth/profile
+// @desc    Get current user profile
+// @access  Private
+router.get('/profile', authMiddleware, async (req, res) => {
+  try {
+    const user = req.user;
+
+    res.json({
+      success: true,
+      message: 'Profile retrieved successfully',
+      user: {
+        id: user._id,
+        email: user.email,
+        companyName: user.companyName,
+        contactPerson: user.contactPerson,
+        userType: user.userType,
+        role: user.role,
+        isAdmin: user.isAdmin || false,
+        sector: user.sector || 'Not specified',
+        hsCode: user.hsCode || '',
+        targetCountries: user.targetCountries || []
+      }
+    });
+
+  } catch (error) {
+    logger.error('Profile retrieval error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while retrieving profile'
     });
   }
 });

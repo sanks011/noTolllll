@@ -1,10 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import ProfileCompletionModal from "@/components/ProfileCompletionModal"
+import { useAuth } from "@/contexts/AuthContext"
+import { apiService } from "@/lib/api"
+import { useToast } from "@/hooks/use-toast"
 import {
   TrendingUp,
   Users,
@@ -18,11 +22,11 @@ import {
   MapPin,
   Package,
   Ship,
+  Edit,
+  CheckCircle,
 } from "lucide-react"
 import Link from "next/link"
 import DashboardLayout from "@/components/dashboard-layout"
-import ProfileCompletionModal from "@/components/ProfileCompletionModal"
-import { useAuth } from "@/contexts/AuthContext"
 
 // Sample data for seller - would come from API
 const sampleData = {
@@ -71,19 +75,44 @@ const sampleData = {
 export default function SellerDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
   const [showProfileModal, setShowProfileModal] = useState(false)
-  const { user } = useAuth()
+  const [profileCompleted, setProfileCompleted] = useState(false)
+  const { user, updateUser } = useAuth()
+  const { toast } = useToast()
+
+  // Check if profile is completed
+  useEffect(() => {
+    if (user) {
+      // Use the backend's profileCompleted flag first, with fallback logic
+      const backendCompleted = user.profileCompleted === true
+      const fallbackCompleted = !!(user.sector && user.sector !== 'Not specified' && 
+                                user.hsCode && 
+                                user.targetCountries && user.targetCountries.length > 0)
+      
+      setProfileCompleted(backendCompleted || fallbackCompleted)
+    }
+  }, [user])
 
   const handleProfileUpdate = async (profileData: any) => {
     try {
-      // Here you would typically call an API to update the user profile
-      console.log('Profile data to update:', profileData)
+      const response = await apiService.updateProfile(profileData)
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Update the user state in AuthContext with the response data
+      if (response.user) {
+        updateUser(response.user)
+      }
       
-      setShowProfileModal(false)
+      setProfileCompleted(true)
+      toast({
+        title: "Profile updated successfully!",
+        description: "Your business profile has been completed.",
+      })
     } catch (error) {
-      console.error('Error updating profile:', error)
+      console.error("Profile update failed:", error)
+      toast({
+        title: "Error updating profile",
+        description: "Please try again later.",
+        variant: "destructive",
+      })
     }
   }
 
@@ -338,6 +367,7 @@ export default function SellerDashboard() {
         onClose={() => setShowProfileModal(false)}
         userRole="Seller"
         onProfileUpdate={handleProfileUpdate}
+        existingUserData={user}
       />
     </DashboardLayout>
   )

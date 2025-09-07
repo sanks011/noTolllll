@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Globe, Building2, User, LogOut, Settings } from "lucide-react"
+import { Globe, User, LogOut, Settings } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
@@ -21,7 +21,7 @@ const getUserInitials = (contactPerson?: string, email?: string): string => {
 }
 
 export function Navbar({ showAuth = true }: { showAuth?: boolean }) {
-  const { user, signout } = useAuth()
+  const { user, signout, loading } = useAuth()
   const router = useRouter()
 
   const handleSignOut = () => {
@@ -32,23 +32,15 @@ export function Navbar({ showAuth = true }: { showAuth?: boolean }) {
   const getDashboardUrl = () => {
     if (!user) return '/dashboard'
     
-    if (user.userType === 'admin') return '/dashboard/admin'
-    if (user.userType === 'buyer') return '/dashboard/buyer'
-    if (user.userType === 'seller') return '/dashboard/seller'
+    if (user.isAdmin) return '/dashboard/admin'
+    if (user.role === 'Buyer') return '/dashboard/buyer'
+    if (user.role === 'Seller') return '/dashboard/seller'
     return '/dashboard'
   }
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
-        {/* Government Banner */}
-        <div className="flex items-center justify-center py-2 mb-4 bg-primary/5 rounded-lg">
-          <Badge variant="outline" className="text-xs font-medium">
-            <Building2 className="h-3 w-3 mr-1" />
-            Government of Odisha Official Platform
-          </Badge>
-        </div>
-
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="flex items-center space-x-2">
@@ -65,7 +57,13 @@ export function Navbar({ showAuth = true }: { showAuth?: boolean }) {
           {showAuth && (
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              {user ? (
+              {loading ? (
+                // Show loading state during auth check
+                <div className="flex items-center space-x-2">
+                  <div className="h-8 w-16 bg-muted animate-pulse rounded"></div>
+                  <div className="h-8 w-20 bg-muted animate-pulse rounded"></div>
+                </div>
+              ) : user ? (
                 <>
                   <Button asChild variant="outline" size="sm" className="font-medium">
                     <Link href={getDashboardUrl()}>Dashboard</Link>

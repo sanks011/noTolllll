@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -19,6 +19,7 @@ interface ProfileCompletionModalProps {
   onClose: () => void
   userRole: "Buyer" | "Seller"
   onProfileUpdate: (profileData: any) => void
+  existingUserData?: any
 }
 
 // Common sectors for both buyers and sellers
@@ -63,49 +64,91 @@ export default function ProfileCompletionModal({
   isOpen, 
   onClose, 
   userRole,
-  onProfileUpdate 
+  onProfileUpdate,
+  existingUserData 
 }: ProfileCompletionModalProps) {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
 
   const [profileData, setProfileData] = useState({
-    // Basic Business Info
-    sector: "",
-    companySize: "",
-    annualTurnover: "",
-    establishedYear: "",
-    businessDescription: "",
-    website: "",
+    // Basic Business Info - Initialize with existing data
+    sector: existingUserData?.sector || "",
+    companySize: existingUserData?.companySize || "",
+    annualTurnover: existingUserData?.annualTurnover || "",
+    establishedYear: existingUserData?.establishedYear || "",
+    businessDescription: existingUserData?.businessDescription || "",
+    website: existingUserData?.website || "",
     
-    // Product/Service Info
-    primaryProducts: [] as string[],
-    hsCode: "",
-    certifications: [] as string[],
+    // Product/Service Info - Initialize with existing data
+    primaryProducts: existingUserData?.primaryProducts || [],
+    hsCode: existingUserData?.hsCode || "",
+    certifications: existingUserData?.certifications || [],
     
-    // Market Info  
-    targetMarkets: [] as string[],
-    currentMarkets: [] as string[],
+    // Market Info - Initialize with existing data
+    targetMarkets: existingUserData?.targetMarkets || [],
+    currentMarkets: existingUserData?.currentMarkets || [],
     
-    // Buyer-specific fields
-    sourcingBudget: "",
-    orderFrequency: "",
-    preferredSupplierLocation: "",
-    qualityRequirements: "",
+    // Buyer-specific fields - Initialize with existing data
+    sourcingBudget: existingUserData?.sourcingBudget || "",
+    orderFrequency: existingUserData?.orderFrequency || "",
+    preferredSupplierLocation: existingUserData?.preferredSupplierLocation || "",
+    qualityRequirements: existingUserData?.qualityRequirements || "",
     
-    // Seller-specific fields
-    productionCapacity: "",
-    exportExperience: "",
-    leadTime: "",
-    minimumOrderQuantity: "",
-    paymentTerms: "",
+    // Seller-specific fields - Initialize with existing data
+    productionCapacity: existingUserData?.productionCapacity || "",
+    exportExperience: existingUserData?.exportExperience || "",
+    leadTime: existingUserData?.leadTime || "",
+    minimumOrderQuantity: existingUserData?.minimumOrderQuantity || "",
+    paymentTerms: existingUserData?.paymentTerms || "",
     
-    // Additional
-    specialRequirements: "",
-    businessGoals: [] as string[]
+    // Additional - Initialize with existing data
+    specialRequirements: existingUserData?.specialRequirements || "",
+    businessGoals: existingUserData?.businessGoals || []
   })
 
   const [newProduct, setNewProduct] = useState("")
+
+  // Update profileData when existingUserData changes or modal opens
+  useEffect(() => {
+    if (isOpen && existingUserData) {
+      setProfileData({
+        // Basic Business Info - Initialize with existing data
+        sector: existingUserData?.sector || "",
+        companySize: existingUserData?.companySize || "",
+        annualTurnover: existingUserData?.annualTurnover || "",
+        establishedYear: existingUserData?.establishedYear || "",
+        businessDescription: existingUserData?.businessDescription || "",
+        website: existingUserData?.website || "",
+        
+        // Product/Service Info - Initialize with existing data
+        primaryProducts: existingUserData?.primaryProducts || [],
+        hsCode: existingUserData?.hsCode || "",
+        certifications: existingUserData?.certifications || [],
+        
+        // Market Info - Initialize with existing data
+        targetMarkets: existingUserData?.targetMarkets || [],
+        currentMarkets: existingUserData?.currentMarkets || [],
+        
+        // Buyer-specific fields - Initialize with existing data
+        sourcingBudget: existingUserData?.sourcingBudget || "",
+        orderFrequency: existingUserData?.orderFrequency || "",
+        preferredSupplierLocation: existingUserData?.preferredSupplierLocation || "",
+        qualityRequirements: existingUserData?.qualityRequirements || "",
+        
+        // Seller-specific fields - Initialize with existing data
+        productionCapacity: existingUserData?.productionCapacity || "",
+        exportExperience: existingUserData?.exportExperience || "",
+        leadTime: existingUserData?.leadTime || "",
+        minimumOrderQuantity: existingUserData?.minimumOrderQuantity || "",
+        paymentTerms: existingUserData?.paymentTerms || "",
+        
+        // Additional - Initialize with existing data
+        specialRequirements: existingUserData?.specialRequirements || "",
+        businessGoals: existingUserData?.businessGoals || []
+      })
+    }
+  }, [isOpen, existingUserData])
 
   const handleArrayField = (field: keyof typeof profileData, value: string, checked: boolean) => {
     const currentArray = profileData[field] as string[]
@@ -135,7 +178,7 @@ export default function ProfileCompletionModal({
   const removeProduct = (product: string) => {
     setProfileData(prev => ({
       ...prev,
-      primaryProducts: prev.primaryProducts.filter(p => p !== product)
+      primaryProducts: prev.primaryProducts.filter((p: string) => p !== product)
     }))
   }
 
@@ -301,7 +344,7 @@ export default function ProfileCompletionModal({
                   </div>
                   {profileData.primaryProducts.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {profileData.primaryProducts.map((product, index) => (
+                      {profileData.primaryProducts.map((product: string, index: number) => (
                         <Badge key={index} variant="secondary" className="flex items-center gap-1">
                           {product}
                           <X 

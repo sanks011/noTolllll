@@ -31,22 +31,31 @@ export default function BuyerDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [profileCompleted, setProfileCompleted] = useState(false)
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const { toast } = useToast()
 
   // Check if profile is completed
   useEffect(() => {
     if (user) {
-      const isCompleted = !!(user.sector && user.sector !== 'Not specified' && 
-                         user.hsCode && 
-                         user.targetCountries && user.targetCountries.length > 0)
-      setProfileCompleted(isCompleted)
+      // Use the backend's profileCompleted flag first, with fallback logic
+      const backendCompleted = user.profileCompleted === true
+      const fallbackCompleted = !!(user.sector && user.sector !== 'Not specified' && 
+                                user.hsCode && 
+                                user.targetCountries && user.targetCountries.length > 0)
+      
+      setProfileCompleted(backendCompleted || fallbackCompleted)
     }
   }, [user])
 
   const handleProfileUpdate = async (profileData: any) => {
     try {
-      await apiService.updateProfile(profileData)
+      const response = await apiService.updateProfile(profileData)
+      
+      // Update the user state in AuthContext with the response data
+      if (response.user) {
+        updateUser(response.user)
+      }
+      
       setProfileCompleted(true)
       toast({
         title: "Profile updated successfully!",
@@ -329,6 +338,7 @@ export default function BuyerDashboard() {
         onClose={() => setShowProfileModal(false)}
         userRole="Buyer"
         onProfileUpdate={handleProfileUpdate}
+        existingUserData={user}
       />
     </DashboardLayout>
   )

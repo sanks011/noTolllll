@@ -13,7 +13,8 @@ router.get('/profile', async (req, res) => {
     
     res.json({
       success: true,
-      data: {
+      message: 'Profile retrieved successfully',
+      user: {
         id: user._id,
         email: user.email,
         companyName: user.companyName,
@@ -21,9 +22,9 @@ router.get('/profile', async (req, res) => {
         userType: user.userType,
         role: user.role,
         isAdmin: user.isAdmin || false,
-        sector: user.sector,
-        hsCode: user.hsCode,
-        targetCountries: user.targetCountries,
+        sector: user.sector || 'Not specified',
+        hsCode: user.hsCode || '',
+        targetCountries: user.targetCountries || [],
         isVerified: user.isVerified,
         createdAt: user.createdAt,
         profileCompleted: user.profileCompleted || false,
@@ -137,11 +138,39 @@ router.put('/profile', async (req, res) => {
       });
     }
 
+    // Get the updated user data
+    const updatedUser = await User.findById(userId);
+
     logger.info(`User ${userId} updated profile`);
 
     res.json({
       success: true,
-      message: 'Profile updated successfully'
+      message: 'Profile updated successfully',
+      user: {
+        id: updatedUser._id,
+        email: updatedUser.email,
+        companyName: updatedUser.companyName,
+        contactPerson: updatedUser.contactPerson,
+        userType: updatedUser.userType,
+        role: updatedUser.role,
+        isAdmin: updatedUser.isAdmin || false,
+        sector: updatedUser.sector || 'Not specified',
+        hsCode: updatedUser.hsCode || '',
+        targetCountries: updatedUser.targetCountries || [],
+        isVerified: updatedUser.isVerified,
+        createdAt: updatedUser.createdAt,
+        profileCompleted: updatedUser.profileCompleted || false,
+        // Extended profile fields
+        companySize: updatedUser.companySize,
+        annualTurnover: updatedUser.annualTurnover,
+        establishedYear: updatedUser.establishedYear,
+        businessDescription: updatedUser.businessDescription,
+        website: updatedUser.website,
+        primaryProducts: updatedUser.primaryProducts || [],
+        certifications: updatedUser.certifications || [],
+        targetMarkets: updatedUser.targetMarkets || [],
+        currentMarkets: updatedUser.currentMarkets || []
+      }
     });
 
   } catch (error) {
