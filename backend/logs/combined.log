@@ -9373,3 +9373,48 @@
 {"level":"info","message":"GET /api/trade-data/analytics?sector=textile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:37.114Z"}
 {"level":"info","message":"GET /api/trade-data/analytics?sector=seafood - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:38.921Z"}
 {"level":"info","message":"GET /api/trade-data/analytics?sector=textile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:40.801Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:37:49.850Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:37:50.074Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:39:09.776Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:39:09.777Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:39:09.782Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:39:09.784Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:39:09.789Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:39:09.924Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:46:10.590Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:46:10.602Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:46:10.603Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:46:10.609Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:46:10.610Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:46:10.714Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:09.544Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:09.545Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:09.560Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:09.729Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:09.732Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:09.794Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:09.833Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:47:10.088Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:20.599Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:20.923Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:36.857Z"}
+{"level":"info","message":"User signed in: test@example.com","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:38.682Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:58.861Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:58.872Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:58.874Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:00:58.874Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:06:42.547Z"}
+{"level":"info","message":"GET /api/users/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:06:42.658Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:07:52.382Z"}
+{"level":"info","message":"Fetching news with query: tariff rates India","service":"tradenavigator-api","timestamp":"2025-09-07T15:07:52.383Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:07:53.004Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:07:53.216Z"}
+{"level":"info","message":"Fetched and cached 10 articles for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:07:56.587Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:07:56.593Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:07:56.594Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.203Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.204Z"}
+{"level":"info","message":"GET /api/news/categories/tariff - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.206Z"}
+{"level":"info","message":"Returning cached news for category: tariff","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.206Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.223Z"}
+{"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T15:08:15.386Z"}

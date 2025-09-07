@@ -182,13 +182,87 @@ export default function SellerDashboard() {
           </Card>
         </div>
 
+        {/* Market Explorer Quick Actions */}
+        <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-blue-600" />
+              Market Explorer - Find New Markets
+            </CardTitle>
+            <CardDescription>
+              Discover new export opportunities with tariff analysis and market intelligence
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm">Quick Market Analysis</h4>
+                <p className="text-sm text-muted-foreground">
+                  Compare tariffs, analyze historical prices, and get AI-powered recommendations for your products
+                </p>
+                <div className="flex gap-2">
+                  <Link href="/market-explorer">
+                    <Button className="bg-blue-600 hover:bg-blue-700">
+                      <Target className="mr-2 h-4 w-4" />
+                      Explore Markets
+                    </Button>
+                  </Link>
+                  <Link href="/buyers">
+                    <Button variant="outline">
+                      <Users className="mr-2 h-4 w-4" />
+                      Find Buyers
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm">Market Insights</h4>
+                <div className="grid grid-cols-2 gap-3 text-center">
+                  <div className="p-3 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div className="text-lg font-bold text-green-600">3</div>
+                    <div className="text-xs text-muted-foreground">Active Markets</div>
+                  </div>
+                  <div className="p-3 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div className="text-lg font-bold text-blue-600">89%</div>
+                    <div className="text-xs text-muted-foreground">Best Opportunity</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* News Section */}
         <NewsSection className="mb-6" />
 
         {/* Trade Analytics Section */}
         {profileCompleted && (
           <div className="mb-6">
-            <TradeDataChart userSector={user?.sector === 'Seafood' ? 'seafood' : user?.sector === 'Textile' ? 'textile' : null} />
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Trade Analytics Overview</CardTitle>
+                    <CardDescription>Quick view of your sector's performance</CardDescription>
+                  </div>
+                  <Link href="/market-explorer">
+                    <Button size="sm" variant="outline" className="flex items-center gap-2">
+                      <Target className="h-4 w-4" />
+                      Advanced Analytics
+                    </Button>
+                  </Link>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <TradeDataChart userSector={user?.sector === 'Seafood' ? 'seafood' : user?.sector === 'Textile' ? 'textile' : null} />
+                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-sm text-blue-800 dark:text-blue-200">
+                    💡 <strong>Want deeper insights?</strong> Visit our Market Explorer for comprehensive tariff analysis, 
+                    historical price trends, policy updates, and AI-powered market recommendations.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
 
@@ -220,10 +294,17 @@ export default function SellerDashboard() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4">
+              <div className="mt-4 space-y-2">
                 <Link href="/buyers">
                   <Button className="w-full">
-                    View All Buyers <ArrowUpRight className="ml-2 h-4 w-4" />
+                    <Users className="mr-2 h-4 w-4" />
+                    Explore Buyers Directory
+                  </Button>
+                </Link>
+                <Link href="/market-explorer">
+                  <Button variant="outline" className="w-full">
+                    <Globe className="mr-2 h-4 w-4" />
+                    Find New Markets
                   </Button>
                 </Link>
               </div>

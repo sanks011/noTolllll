@@ -57,6 +57,7 @@ const buyerNavItems = [
 const sellerNavItems = [
   { name: "Dashboard", href: "/dashboard/seller", icon: Home },
   { name: "Market Intelligence", href: "/market-intelligence", icon: TrendingUp },
+  { name: "Market Explorer", href: "/market-explorer", icon: Globe },
   { name: "Find Buyers", href: "/buyers", icon: Users },
   { name: "Pitch Assistant", href: "/pitch-assistant", icon: FileText },
   { name: "Compliance Center", href: "/compliance", icon: Shield },

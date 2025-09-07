@@ -406,6 +406,12 @@ export default function BuyersPage() {
           </div>
           <div className="flex space-x-2">
             <Button variant="outline" asChild>
+              <Link href="/market-explorer">
+                <Globe className="mr-2 h-4 w-4" />
+                Market Explorer
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
               <Link href="/pitch-assistant">
                 <FileText className="mr-2 h-4 w-4" />
                 Pitch Assistant
