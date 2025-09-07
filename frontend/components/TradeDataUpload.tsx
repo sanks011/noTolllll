@@ -95,7 +95,8 @@ export default function TradeDataUpload({ onUploadComplete }: TradeDataUploadPro
         });
       }, 200);
 
-      const response = await fetch('http://localhost:3001/api/trade-data/upload', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const response = await fetch(`${apiUrl}/trade-data/upload`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${adminToken}`,

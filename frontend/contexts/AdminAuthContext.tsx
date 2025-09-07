@@ -39,7 +39,8 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
   const login = async (adminId: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/admin-auth/login', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const response = await fetch(`${apiUrl}/admin-auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +80,8 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
     if (!token) return false;
 
     try {
-      const response = await fetch('http://localhost:3001/api/admin-auth/verify', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const response = await fetch(`${apiUrl}/admin-auth/verify`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
