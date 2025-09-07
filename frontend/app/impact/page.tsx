@@ -1,21 +1,23 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { TrendingUp, DollarSign, Globe, Users, Award, Target, Share2 } from "lucide-react"
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts"
 import DashboardLayout from "@/components/dashboard-layout"
+import dynamic from 'next/dynamic'
+
+// Import charts dynamically to avoid SSR issues
+const ProgressChart = dynamic(() => import('@/components/ImpactCharts').then(mod => ({ default: mod.ProgressChart })), { 
+  ssr: false,
+  loading: () => <div className="h-[300px] bg-gray-100 animate-pulse rounded"></div>
+});
+
+const MarketChart = dynamic(() => import('@/components/ImpactCharts').then(mod => ({ default: mod.MarketChart })), { 
+  ssr: false,
+  loading: () => <div className="h-[200px] bg-gray-100 animate-pulse rounded"></div>
+});
 
 const personalMetrics = [
   {
@@ -143,16 +145,7 @@ export default function ImpactPage() {
               <CardTitle>Monthly Progress</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={monthlyProgress}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="revenue" stroke="#2C7BE5" strokeWidth={3} name="Revenue (₹M)" />
-                  <Line type="monotone" dataKey="orders" stroke="#7C3AED" strokeWidth={2} name="Orders" />
-                </LineChart>
-              </ResponsiveContainer>
+              <ProgressChart data={monthlyProgress} />
             </CardContent>
           </Card>
 
@@ -162,16 +155,7 @@ export default function ImpactPage() {
               <CardTitle>Market Distribution</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie data={marketDistribution} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="value">
-                    {marketDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+              <MarketChart data={marketDistribution} />
               <div className="mt-4 space-y-2">
                 {marketDistribution.map((market, index) => (
                   <div key={index} className="flex items-center justify-between text-sm">
