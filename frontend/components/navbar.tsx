@@ -48,7 +48,7 @@ export function Navbar({ showAuth = true }: { showAuth?: boolean }) {
                 <Globe className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
-                <div className="text-lg font-bold">Market Navigator</div>
+                <div className="text-lg font-bold">noToll</div>
                 <div className="text-xs text-muted-foreground">Export Facilitation Platform</div>
               </div>
             </div>

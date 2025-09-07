@@ -235,7 +235,7 @@ export default function ImpactPage() {
               <div>
                 <h3 className="text-lg font-semibold text-foreground">Share Your Success Story</h3>
                 <p className="text-muted-foreground mt-1">
-                  Inspire other exporters by sharing how TradeNavigator helped you overcome challenges
+                  Inspire other exporters by sharing how noToll helped you overcome challenges
                 </p>
               </div>
               <Button className="bg-primary hover:bg-primary/90">

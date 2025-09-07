@@ -11,7 +11,7 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Market Navigator - Government of Odisha Export Platform",
+  title: "noToll - Government of Odisha Export Platform",
   description: "Official platform for Odisha exporters to navigate international markets and overcome trade barriers",
 }
 

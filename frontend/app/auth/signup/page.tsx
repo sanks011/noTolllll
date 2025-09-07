@@ -55,7 +55,7 @@ export default function SignUpPage() {
 
       toast({
         title: "Account created successfully!",
-        description: "Welcome to TradeNavigator. Complete your profile in the dashboard.",
+        description: "Welcome to noToll. Complete your profile in the dashboard.",
       })
 
       // Redirect to dashboard based on role

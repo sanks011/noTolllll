@@ -115,7 +115,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  "After U.S. tariffs hit our shrimp exports, TradeNavigator helped us find new buyers in Japan. We
+                  "After U.S. tariffs hit our shrimp exports, noToll helped us find new buyers in Japan. We
                   recovered 80% of our lost revenue within 6 months."
                 </p>
                 <div className="font-semibold">Rajesh Kumar</div>
@@ -145,7 +145,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  "Government relief schemes were complex until TradeNavigator simplified the process. We secured ₹2.5
+                  "Government relief schemes were complex until noToll simplified the process. We secured ₹2.5
                   crores in support funding."
                 </p>
                 <div className="font-semibold">Suresh Mohanty</div>
@@ -200,7 +200,7 @@ export default function LandingPage() {
                   <Globe className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <div className="font-bold">Market Navigator</div>
+                  <div className="font-bold">noToll</div>
                   <div className="text-xs text-muted-foreground">Govt. of Odisha</div>
                 </div>
               </div>

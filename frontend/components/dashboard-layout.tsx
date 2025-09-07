@@ -99,7 +99,7 @@ export default function DashboardLayout({ children, userType = "buyer" }: Dashbo
       <div className="flex h-16 items-center border-b px-6">
         <Link href="/" className="flex items-center space-x-2">
           <Globe className="h-6 w-6 text-primary" />
-          <span className="font-bold">TradeNavigator</span>
+          <span className="font-bold">noToll</span>
         </Link>
       </div>
 

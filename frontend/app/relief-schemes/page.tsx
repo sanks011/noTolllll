@@ -255,7 +255,7 @@ export default function ReliefSchemesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Financial Relief Navigator</h1>
+            <h1 className="text-3xl font-bold">Financial Relief Center</h1>
             <p className="text-muted-foreground">
               Discover and apply for government relief schemes and financial assistance
             </p>
