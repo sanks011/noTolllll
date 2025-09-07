@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import ProfileCompletionModal from "@/components/ProfileCompletionModal"
+import NewsSection from "@/components/NewsSection"
 import { useAuth } from "@/contexts/AuthContext"
 import { apiService } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
@@ -179,6 +180,9 @@ export default function SellerDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* News Section */}
+        <NewsSection className="mb-6" />
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {/* Recent Buyers */}

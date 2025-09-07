@@ -23,6 +23,7 @@ const impactRoutes = require('./routes/impact');
 const uploadRoutes = require('./routes/upload');
 const dashboardRoutes = require('./routes/dashboard');
 const tradeRoutes = require('./routes/trade');
+const newsRoutes = require('./routes/news');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -98,6 +99,7 @@ app.use('/api/impact', authMiddleware, impactRoutes);
 app.use('/api/upload', authMiddleware, uploadRoutes);
 app.use('/api/dashboard', authMiddleware, dashboardRoutes);
 app.use('/api/trade', authMiddleware, tradeRoutes);
+app.use('/api/news', newsRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {

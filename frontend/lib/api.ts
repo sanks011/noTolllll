@@ -58,6 +58,32 @@ export interface BuyersParams {
   sortOrder?: string;
 }
 
+export interface NewsArticle {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  publishedAt: string;
+  source: {
+    name: string;
+    url: string;
+  };
+  category: string;
+  relevanceScore: number;
+}
+
+export interface NewsResponse {
+  success: boolean;
+  data: NewsArticle[];
+  meta: {
+    cached: boolean;
+    lastUpdated: string;
+    category: string;
+    count: number;
+  };
+  message?: string;
+}
+
 export interface ContactUpdateData {
   status: string;
   notes?: string;
@@ -369,6 +395,33 @@ class ApiService {
     return this.request('/trade/clear-cache', {
       method: 'POST',
       body: JSON.stringify({}),
+    });
+  }
+
+  // News API methods
+  async getNews(category: string = 'tariff'): Promise<NewsResponse> {
+    const url = `/news?category=${category}`;
+    return this.request(url);
+  }
+
+  async getNewsByCategory(category: 'tariff' | 'trade' | 'economy'): Promise<NewsResponse> {
+    return this.request(`/news/categories/${category}`);
+  }
+
+  async refreshNews(category: string = 'tariff'): Promise<NewsResponse> {
+    return this.request('/news/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ category }),
+    });
+  }
+
+  async getNewsCacheStatus(): Promise<any> {
+    return this.request('/news/cache/status');
+  }
+
+  async clearNewsCache(): Promise<any> {
+    return this.request('/news/cache', {
+      method: 'DELETE',
     });
   }
 }
