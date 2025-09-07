@@ -26,14 +26,17 @@ class TradeData {
     const query = { isActive: true };
     
     if (filters.sector) {
-      // Map sectors to MTN categories
+      // Map sectors to MTN categories - handle both cases
       const sectorMapping = {
-        'Seafood': 'AG', // Agricultural products include seafood
-        'Textile': 'NON_AG', // Textiles are non-agricultural
-        'Both': null // Show both categories
+        'Seafood': 'AG',
+        'seafood': 'AG', // Agricultural products include seafood
+        'Textile': 'NON_AG',
+        'textile': 'NON_AG', // Textiles are non-agricultural
+        'Both': null,
+        'both': null // Show both categories
       };
       
-      if (sectorMapping[filters.sector] !== null) {
+      if (sectorMapping[filters.sector] !== null && sectorMapping[filters.sector] !== undefined) {
         query.product_code = sectorMapping[filters.sector];
       }
     }
@@ -62,12 +65,16 @@ class TradeData {
     const collection = db.collection('trade_data');
     
     const matchStage = { isActive: true };
-    if (sector && sector !== 'Both') {
+    if (sector && sector !== 'Both' && sector !== 'both') {
       const sectorMapping = {
         'Seafood': 'AG',
-        'Textile': 'NON_AG'
+        'seafood': 'AG',
+        'Textile': 'NON_AG',
+        'textile': 'NON_AG'
       };
-      matchStage.product_code = sectorMapping[sector];
+      if (sectorMapping[sector]) {
+        matchStage.product_code = sectorMapping[sector];
+      }
     }
     
     const pipeline = [

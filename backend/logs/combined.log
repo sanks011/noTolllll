@@ -9354,3 +9354,9 @@
 {"level":"info","message":"GET /api/trade-data/analytics?sector=textile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:26:36.290Z"}
 {"level":"info","message":"GET /api/trade-data/analytics?sector=seafood - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:26:37.825Z"}
 {"level":"info","message":"GET /api/trade-data/analytics - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T14:27:39.282Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:02.476Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:03.084Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:03.130Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:13.331Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:14.001Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T14:33:14.056Z"}
