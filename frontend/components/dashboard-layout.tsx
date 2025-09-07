@@ -36,16 +36,29 @@ import {
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/contexts/AuthContext"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
-  userType?: "indian" | "international" // Made userType optional with default
+  userType?: "buyer" | "seller" | "admin"
 }
 
-const indianNavItems = [
-  { name: "Dashboard", href: "/dashboard/indian", icon: Home },
+const buyerNavItems = [
+  { name: "Dashboard", href: "/dashboard/buyer", icon: Home },
   { name: "Market Intelligence", href: "/market-intelligence", icon: TrendingUp },
-  { name: "Buyer Directory", href: "/buyers", icon: Users },
+  { name: "Find Suppliers", href: "/buyers", icon: Users },
+  { name: "Compliance Center", href: "/compliance", icon: Shield },
+  { name: "Relief Schemes", href: "/relief-schemes", icon: Gift },
+  { name: "Community", href: "/community", icon: MessageSquare },
+  { name: "Success Stories", href: "/success-stories", icon: Trophy },
+  { name: "Impact Tracker", href: "/impact-tracker", icon: BarChart3 },
+]
+
+const sellerNavItems = [
+  { name: "Dashboard", href: "/dashboard/seller", icon: Home },
+  { name: "Market Intelligence", href: "/market-intelligence", icon: TrendingUp },
+  { name: "Market Explorer", href: "/market-explorer", icon: Globe },
+  { name: "Find Buyers", href: "/buyers", icon: Users },
   { name: "Pitch Assistant", href: "/pitch-assistant", icon: FileText },
   { name: "Compliance Center", href: "/compliance", icon: Shield },
   { name: "Relief Schemes", href: "/relief-schemes", icon: Gift },
@@ -54,23 +67,31 @@ const indianNavItems = [
   { name: "Impact Tracker", href: "/impact-tracker", icon: BarChart3 },
 ]
 
-const internationalNavItems = [
-  { name: "Dashboard", href: "/dashboard/international", icon: Home },
-  { name: "Indian Suppliers", href: "/suppliers", icon: Users },
-  { name: "Market Intelligence", href: "/market-intelligence", icon: TrendingUp },
-  { name: "Trade Opportunities", href: "/opportunities", icon: Target },
-  { name: "Compliance Center", href: "/compliance", icon: Shield },
-  { name: "Collaboration Schemes", href: "/collaboration-schemes", icon: Gift },
-  { name: "Community", href: "/community", icon: MessageSquare },
-  { name: "Impact Tracker", href: "/impact-tracker", icon: BarChart3 },
+const adminNavItems = [
+  { name: "Dashboard", href: "/dashboard/admin", icon: Home },
+  { name: "User Management", href: "/admin/users", icon: Users },
+  { name: "Data Management", href: "/admin/data", icon: BarChart3 },
+  { name: "System Settings", href: "/admin/settings", icon: Settings },
 ]
 
-export default function DashboardLayout({ children, userType = "indian" }: DashboardLayoutProps) {
-  // Changed to default export and added default userType
+export default function DashboardLayout({ children, userType = "buyer" }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
+  const { user, signout } = useAuth()
 
-  const navItems = userType === "indian" ? indianNavItems : internationalNavItems
+  const navItems = userType === "buyer" ? buyerNavItems : 
+                   userType === "seller" ? sellerNavItems : 
+                   adminNavItems
+
+  const getUserInitials = (name?: string, email?: string) => {
+    if (name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    }
+    if (email) {
+      return email.slice(0, 2).toUpperCase()
+    }
+    return 'U'
+  }
 
   const SidebarContent = () => (
     <div className="flex h-full flex-col">
@@ -78,7 +99,7 @@ export default function DashboardLayout({ children, userType = "indian" }: Dashb
       <div className="flex h-16 items-center border-b px-6">
         <Link href="/" className="flex items-center space-x-2">
           <Globe className="h-6 w-6 text-primary" />
-          <span className="font-bold">TradeNavigator</span>
+          <span className="font-bold">noToll</span>
         </Link>
       </div>
 
@@ -110,12 +131,12 @@ export default function DashboardLayout({ children, userType = "indian" }: Dashb
         <div className="flex items-center space-x-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/placeholder.svg?height=32&width=32" />
-            <AvatarFallback>RK</AvatarFallback>
+            <AvatarFallback>{getUserInitials(user?.contactPerson, user?.email)}</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">Rajesh Kumar</p>
+            <p className="text-sm font-medium truncate">{user?.contactPerson || user?.email || 'User'}</p>
             <p className="text-xs text-muted-foreground truncate">
-              {userType === "indian" ? "Indian Exporter" : "International Trader"}
+              {user?.role || (userType === "buyer" ? "Buyer" : userType === "seller" ? "Seller" : "Administrator")}
             </p>
           </div>
         </div>
@@ -153,7 +174,7 @@ export default function DashboardLayout({ children, userType = "indian" }: Dashb
             <div className="flex items-center space-x-4">
               <div className="hidden lg:block">
                 <h2 className="text-lg font-semibold">
-                  {userType === "indian" ? "Indian Exporter Dashboard" : "International Trader Dashboard"}
+                  {userType === "buyer" ? "Buyer Dashboard" : userType === "seller" ? "Seller Dashboard" : "Admin Dashboard"}
                 </h2>
               </div>
             </div>
@@ -171,15 +192,15 @@ export default function DashboardLayout({ children, userType = "indian" }: Dashb
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src="/placeholder.svg?height=32&width=32" />
-                      <AvatarFallback>RK</AvatarFallback>
+                      <AvatarFallback>{getUserInitials(user?.contactPerson, user?.email)}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">Rajesh Kumar</p>
-                      <p className="text-xs leading-none text-muted-foreground">rajesh@odishaseafood.com</p>
+                      <p className="text-sm font-medium leading-none">{user?.contactPerson || user?.email || 'User'}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -196,7 +217,7 @@ export default function DashboardLayout({ children, userType = "indian" }: Dashb
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={signout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>

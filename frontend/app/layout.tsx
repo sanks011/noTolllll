@@ -5,12 +5,13 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/contexts/AuthContext"
+import { AdminAuthProvider } from "@/contexts/AdminAuthContext"
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Market Navigator - Government of Odisha Export Platform",
+  title: "noToll - Government of Odisha Export Platform",
   description: "Official platform for Odisha exporters to navigate international markets and overcome trade barriers",
 }
 
@@ -24,10 +25,12 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={null}>
           <AuthProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-              {children}
-              <Toaster />
-            </ThemeProvider>
+            <AdminAuthProvider>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                {children}
+                <Toaster />
+              </ThemeProvider>
+            </AdminAuthProvider>
           </AuthProvider>
         </Suspense>
         <Analytics />

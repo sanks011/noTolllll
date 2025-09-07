@@ -8,10 +8,42 @@ interface User {
   email: string
   companyName: string
   contactPerson: string
+  userType: string
   role: string
+  isAdmin?: boolean
   sector: string
   hsCode?: string
   targetCountries?: string[]
+  isVerified?: boolean
+  createdAt?: string
+  profileCompleted?: boolean
+  // Extended profile fields (optional)
+  companySize?: string
+  annualTurnover?: string
+  establishedYear?: number
+  businessDescription?: string
+  website?: string
+  primaryProducts?: string[]
+  certifications?: string[]
+  targetMarkets?: string[]
+  currentMarkets?: string[]
+  sourcingBudget?: string
+  orderFrequency?: string
+  preferredSupplierLocation?: string
+  qualityRequirements?: string
+  productionCapacity?: string
+  exportExperience?: string
+  leadTime?: string
+  minimumOrderQuantity?: string
+  paymentTerms?: string
+  specialRequirements?: string
+  businessGoals?: string[]
+  metrics?: {
+    totalRevenue?: number
+    ordersSecured?: number
+    marketsEntered?: number
+    jobsRetained?: number
+  }
 }
 
 interface SignupData {
@@ -19,10 +51,12 @@ interface SignupData {
   password: string
   companyName: string
   contactPerson: string
+  userType: string
   role: string
-  sector: string
+  isAdmin?: boolean
+  sector?: string
   hsCode?: string
-  targetCountries: string[]
+  targetCountries?: string[]
 }
 
 interface AuthContextType {
@@ -30,6 +64,7 @@ interface AuthContextType {
   signin: (email: string, password: string) => Promise<User>
   signup: (data: SignupData) => Promise<User>
   signout: () => void
+  updateUser: (userData: Partial<User>) => void
   loading: boolean
 }
 
@@ -92,6 +127,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null)
   }
 
+  const updateUser = (userData: Partial<User>) => {
+    if (user) {
+      setUser({ ...user, ...userData })
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -99,6 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signin,
         signup,
         signout,
+        updateUser,
         loading,
       }}
     >

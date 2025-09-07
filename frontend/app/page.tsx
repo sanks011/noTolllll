@@ -2,50 +2,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Globe, Users, Shield, TrendingUp, Star, Building2, Award, FileText, Phone } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { Navbar } from "@/components/navbar"
 import Link from "next/link"
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          {/* Government Banner */}
-          <div className="flex items-center justify-center py-2 mb-4 bg-primary/5 rounded-lg">
-            <Badge variant="outline" className="text-xs font-medium">
-              <Building2 className="h-3 w-3 mr-1" />
-              Government of Odisha Official Platform
-            </Badge>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
-                <div className="h-10 w-10 bg-primary rounded-full flex items-center justify-center">
-                  <Globe className="h-6 w-6 text-primary-foreground" />
-                </div>
-                <div>
-                  <div className="text-lg font-bold">Market Navigator</div>
-                  <div className="text-xs text-muted-foreground">Export Facilitation Platform</div>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <Link
-                href="/auth/signin"
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
-              >
-                Sign In
-              </Link>
-              <Button asChild size="sm" className="font-medium">
-                <Link href="/auth/signup">Register Now</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-primary/5 to-background">
@@ -152,7 +115,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  "After U.S. tariffs hit our shrimp exports, TradeNavigator helped us find new buyers in Japan. We
+                  "After U.S. tariffs hit our shrimp exports, noToll helped us find new buyers in Japan. We
                   recovered 80% of our lost revenue within 6 months."
                 </p>
                 <div className="font-semibold">Rajesh Kumar</div>
@@ -182,7 +145,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  "Government relief schemes were complex until TradeNavigator simplified the process. We secured ₹2.5
+                  "Government relief schemes were complex until noToll simplified the process. We secured ₹2.5
                   crores in support funding."
                 </p>
                 <div className="font-semibold">Suresh Mohanty</div>
@@ -237,7 +200,7 @@ export default function LandingPage() {
                   <Globe className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <div className="font-bold">Market Navigator</div>
+                  <div className="font-bold">noToll</div>
                   <div className="text-xs text-muted-foreground">Govt. of Odisha</div>
                 </div>
               </div>

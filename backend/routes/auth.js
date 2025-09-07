@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const User = require('../models/User');
+const { authMiddleware } = require('../middleware/auth');
 const logger = require('../config/logger');
 
 const router = express.Router();
@@ -11,10 +12,12 @@ const signupSchema = Joi.object({
   email: Joi.string().email().required(),
   companyName: Joi.string().min(2).max(100).required(),
   contactPerson: Joi.string().min(2).max(50).required(),
-  role: Joi.string().valid('Exporter', 'Processor', 'Farmer Group', 'International Trader').required(),
-  sector: Joi.string().valid('Seafood', 'Textile', 'Both').required(),
-  hsCode: Joi.string().required(),
-  targetCountries: Joi.array().items(Joi.string()).min(1).required(),
+  userType: Joi.string().valid('Indian', 'Foreigner').required(),
+  role: Joi.string().valid('Buyer', 'Seller').required(),
+  isAdmin: Joi.boolean().default(false),
+  sector: Joi.string().valid('Seafood', 'Textile', 'Both', 'Not specified').default('Not specified'),
+  hsCode: Joi.string().default(''),
+  targetCountries: Joi.array().items(Joi.string()).default([]),
   password: Joi.string().min(6).required()
 });
 
@@ -37,7 +40,7 @@ router.post('/signup', async (req, res) => {
       });
     }
 
-    const { email, companyName, contactPerson, role, sector, hsCode, targetCountries, password } = value;
+    const { email, companyName, contactPerson, userType, role, isAdmin, sector, hsCode, targetCountries, password } = value;
 
     // Check if user already exists
     const existingUser = await User.findByEmail(email);
@@ -53,7 +56,9 @@ router.post('/signup', async (req, res) => {
       email,
       companyName,
       contactPerson,
+      userType,
       role,
+      isAdmin: isAdmin || false,
       sector,
       hsCode,
       targetCountries,
@@ -80,7 +85,9 @@ router.post('/signup', async (req, res) => {
         email,
         companyName,
         contactPerson,
+        userType,
         role,
+        isAdmin: isAdmin || false,
         sector
       }
     });
@@ -98,9 +105,22 @@ router.post('/signup', async (req, res) => {
 // @desc    Authenticate user and get token
 // @access  Public
 router.post('/signin', async (req, res) => {
+  console.log('AUTH ROUTE HIT: /signin');
+  console.log('Request body:', req.body);
+  console.log('Request headers:', req.headers);
+  
   try {
     // Validate input
     const { error, value } = signinSchema.validate(req.body);
+    if (error) {
+      console.log('Validation error:', error.details[0].message);
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message
+      });
+    }
+    
+    console.log('Validation passed, proceeding with signin...');
     if (error) {
       return res.status(400).json({
         success: false,
@@ -154,7 +174,9 @@ router.post('/signin', async (req, res) => {
         email: user.email,
         companyName: user.companyName,
         contactPerson: user.contactPerson,
+        userType: user.userType,
         role: user.role,
+        isAdmin: user.isAdmin || false,
         sector: user.sector
       }
     });
@@ -164,6 +186,39 @@ router.post('/signin', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Internal server error'
+    });
+  }
+});
+
+// @route   GET /api/auth/profile
+// @desc    Get current user profile
+// @access  Private
+router.get('/profile', authMiddleware, async (req, res) => {
+  try {
+    const user = req.user;
+
+    res.json({
+      success: true,
+      message: 'Profile retrieved successfully',
+      user: {
+        id: user._id,
+        email: user.email,
+        companyName: user.companyName,
+        contactPerson: user.contactPerson,
+        userType: user.userType,
+        role: user.role,
+        isAdmin: user.isAdmin || false,
+        sector: user.sector || 'Not specified',
+        hsCode: user.hsCode || '',
+        targetCountries: user.targetCountries || []
+      }
+    });
+
+  } catch (error) {
+    logger.error('Profile retrieval error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while retrieving profile'
     });
   }
 });
@@ -200,7 +255,9 @@ router.post('/verify-token', async (req, res) => {
         email: user.email,
         companyName: user.companyName,
         contactPerson: user.contactPerson,
+        userType: user.userType,
         role: user.role,
+        isAdmin: user.isAdmin || false,
         sector: user.sector
       }
     });

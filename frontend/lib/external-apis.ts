@@ -1,6 +1,6 @@
 // External API integrations for Groq AI, News API, and RapidAPI
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY
+const GROQ_API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY || process.env.GROQ_API_KEY
 const NEWS_API_KEY = process.env.NEWS_API_KEY
 const RAPIDAPI_KEY = process.env.NEXT_PUBLIC_RAPIDAPI_KEY || process.env.RAPIDAPI_KEY
 const NEWS_API_BASE = "https://newsapi.org/v2"
@@ -11,12 +11,21 @@ const FEAR_GREED_API_BASE = "https://fear-and-greed-index2.p.rapidapi.com"
 
 class ExternalApiService {
   // Groq AI Chat Completion
-  async groqChatCompletion(messages: any[], model: string = "mixtral-8x7b-32768"): Promise<any> {
+  async groqChatCompletion(messages: any[], model: string = "llama-3.3-70b-versatile"): Promise<any> {
     try {
       if (!GROQ_API_KEY) {
-        throw new Error('GROQ_API_KEY environment variable is not set')
+        console.warn('GROQ_API_KEY not found, using fallback response')
+        return {
+          choices: [{
+            message: {
+              content: "Hello! I'm interested in learning more about your seafood products. Could you provide more details about your certifications and pricing?"
+            }
+          }]
+        }
       }
 
+      console.log('Making GROQ API call with model:', model)
+      
       const response = await fetch(`${GROQ_API_BASE}/chat/completions`, {
         method: 'POST',
         headers: {
@@ -26,19 +35,31 @@ class ExternalApiService {
         body: JSON.stringify({
           messages,
           model,
-          temperature: 0.7,
+          temperature: 1,
           max_tokens: 1024,
+          top_p: 1,
         }),
       })
 
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error(`Groq API error: ${response.status}`, errorText)
         throw new Error(`Groq API error: ${response.status}`)
       }
 
-      return await response.json()
+      const data = await response.json()
+      console.log('GROQ API response:', data)
+      return data
     } catch (error) {
       console.error('Groq API error:', error)
-      throw error
+      // Return fallback response instead of throwing error
+      return {
+        choices: [{
+          message: {
+            content: "Thank you for reaching out! I'm interested in learning more about your seafood products. Could you tell me about your certifications and supply capacity?"
+          }
+        }]
+      }
     }
   }
 

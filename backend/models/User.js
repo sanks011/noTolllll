@@ -7,7 +7,10 @@ class User {
     this.email = userData.email;
     this.companyName = userData.companyName;
     this.contactPerson = userData.contactPerson;
-    this.role = userData.role; // 'Exporter' | 'Processor' | 'Farmer Group' | 'International Trader'
+    // New simplified role structure: userType (Indian/Foreigner) + role (Buyer/Seller)
+    this.userType = userData.userType; // 'Indian' | 'Foreigner' 
+    this.role = userData.role; // 'Buyer' | 'Seller'
+    this.isAdmin = userData.isAdmin || false; // Admin role for platform management
     this.sector = userData.sector; // 'Seafood' | 'Textile' | 'Both'
     this.hsCode = userData.hsCode;
     this.targetCountries = userData.targetCountries || [];
@@ -20,6 +23,35 @@ class User {
     this.ordersSecured = 0;
     this.marketsEntered = 0;
     this.jobsRetained = 0;
+    
+    // Extended profile fields for comprehensive business information
+    this.profileCompleted = false;
+    this.companySize = userData.companySize;
+    this.annualTurnover = userData.annualTurnover;
+    this.establishedYear = userData.establishedYear;
+    this.businessDescription = userData.businessDescription;
+    this.website = userData.website;
+    this.primaryProducts = userData.primaryProducts || [];
+    this.certifications = userData.certifications || [];
+    this.targetMarkets = userData.targetMarkets || [];
+    this.currentMarkets = userData.currentMarkets || [];
+    
+    // Buyer-specific fields
+    this.sourcingBudget = userData.sourcingBudget;
+    this.orderFrequency = userData.orderFrequency;
+    this.preferredSupplierLocation = userData.preferredSupplierLocation;
+    this.qualityRequirements = userData.qualityRequirements;
+    
+    // Seller-specific fields
+    this.productionCapacity = userData.productionCapacity;
+    this.exportExperience = userData.exportExperience;
+    this.leadTime = userData.leadTime;
+    this.minimumOrderQuantity = userData.minimumOrderQuantity;
+    this.paymentTerms = userData.paymentTerms;
+    
+    // Additional fields
+    this.specialRequirements = userData.specialRequirements;
+    this.businessGoals = userData.businessGoals || [];
   }
 
   async save() {

@@ -9,8 +9,12 @@ export interface AuthResponse {
     email: string;
     companyName: string;
     contactPerson: string;
+    userType: string;
     role: string;
     sector: string;
+    isAdmin?: boolean;
+    hsCode?: string;
+    targetCountries?: string[];
   };
 }
 
@@ -18,10 +22,11 @@ export interface SignupData {
   email: string;
   companyName: string;
   contactPerson: string;
+  userType: string;
   role: string;
-  sector: string;
+  sector?: string;
   hsCode?: string;
-  targetCountries: string[];
+  targetCountries?: string[];
   password: string;
 }
 
@@ -51,6 +56,32 @@ export interface BuyersParams {
   limit?: number;
   sortBy?: string;
   sortOrder?: string;
+}
+
+export interface NewsArticle {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  publishedAt: string;
+  source: {
+    name: string;
+    url: string;
+  };
+  category: string;
+  relevanceScore: number;
+}
+
+export interface NewsResponse {
+  success: boolean;
+  data: NewsArticle[];
+  meta: {
+    cached: boolean;
+    lastUpdated: string;
+    category: string;
+    count: number;
+  };
+  message?: string;
 }
 
 export interface ContactUpdateData {
@@ -123,7 +154,7 @@ class ApiService {
   }
 
   async getProfile(): Promise<AuthResponse> {
-    return this.request<AuthResponse>('/auth/profile', {
+    return this.request<AuthResponse>('/users/profile', {
       method: 'GET',
     });
   }
@@ -142,6 +173,13 @@ class ApiService {
 
   async getInternationalDashboard(): Promise<{ success: boolean; data: DashboardData }> {
     return this.request<{ success: boolean; data: DashboardData }>('/dashboard/international');
+  }
+
+  async updateProfile(profileData: any): Promise<{ success: boolean; message: string; user: any }> {
+    return this.request<{ success: boolean; message: string; user: any }>('/users/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
   }
 
   // Market Intelligence methods
@@ -357,6 +395,33 @@ class ApiService {
     return this.request('/trade/clear-cache', {
       method: 'POST',
       body: JSON.stringify({}),
+    });
+  }
+
+  // News API methods
+  async getNews(category: string = 'tariff'): Promise<NewsResponse> {
+    const url = `/news?category=${category}`;
+    return this.request(url);
+  }
+
+  async getNewsByCategory(category: 'tariff' | 'trade' | 'economy'): Promise<NewsResponse> {
+    return this.request(`/news/categories/${category}`);
+  }
+
+  async refreshNews(category: string = 'tariff'): Promise<NewsResponse> {
+    return this.request('/news/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ category }),
+    });
+  }
+
+  async getNewsCacheStatus(): Promise<any> {
+    return this.request('/news/cache/status');
+  }
+
+  async clearNewsCache(): Promise<any> {
+    return this.request('/news/cache', {
+      method: 'DELETE',
     });
   }
 }
