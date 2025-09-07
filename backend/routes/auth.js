@@ -1,0 +1,217 @@
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const Joi = require('joi');
+const User = require('../models/User');
+const logger = require('../config/logger');
+
+const router = express.Router();
+
+// Validation schemas
+const signupSchema = Joi.object({
+  email: Joi.string().email().required(),
+  companyName: Joi.string().min(2).max(100).required(),
+  contactPerson: Joi.string().min(2).max(50).required(),
+  role: Joi.string().valid('Exporter', 'Processor', 'Farmer Group', 'International Trader').required(),
+  sector: Joi.string().valid('Seafood', 'Textile', 'Both').required(),
+  hsCode: Joi.string().required(),
+  targetCountries: Joi.array().items(Joi.string()).min(1).required(),
+  password: Joi.string().min(6).required()
+});
+
+const signinSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required()
+});
+
+// @route   POST /api/auth/signup
+// @desc    Register new user
+// @access  Public
+router.post('/signup', async (req, res) => {
+  try {
+    // Validate input
+    const { error, value } = signupSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message
+      });
+    }
+
+    const { email, companyName, contactPerson, role, sector, hsCode, targetCountries, password } = value;
+
+    // Check if user already exists
+    const existingUser = await User.findByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already exists with this email'
+      });
+    }
+
+    // Create new user
+    const user = new User({
+      email,
+      companyName,
+      contactPerson,
+      role,
+      sector,
+      hsCode,
+      targetCountries,
+      password
+    });
+
+    const result = await user.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: result.insertedId },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE }
+    );
+
+    logger.info(`New user registered: ${email}`);
+
+    res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+      token,
+      user: {
+        id: result.insertedId,
+        email,
+        companyName,
+        contactPerson,
+        role,
+        sector
+      }
+    });
+
+  } catch (error) {
+    logger.error('Signup error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+// @route   POST /api/auth/signin
+// @desc    Authenticate user and get token
+// @access  Public
+router.post('/signin', async (req, res) => {
+  try {
+    // Validate input
+    const { error, value } = signinSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message
+      });
+    }
+
+    const { email, password } = value;
+
+    // Check if user exists
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials'
+      });
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      return res.status(401).json({
+        success: false,
+        message: 'Account is deactivated'
+      });
+    }
+
+    // Check password
+    const isPasswordValid = await User.comparePassword(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials'
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE }
+    );
+
+    logger.info(`User signed in: ${email}`);
+
+    res.json({
+      success: true,
+      message: 'Sign in successful',
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        companyName: user.companyName,
+        contactPerson: user.contactPerson,
+        role: user.role,
+        sector: user.sector
+      }
+    });
+
+  } catch (error) {
+    logger.error('Signin error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+// @route   POST /api/auth/verify-token
+// @desc    Verify JWT token
+// @access  Public
+router.post('/verify-token', async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token is required'
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+
+    if (!user || !user.isActive) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid token'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Token is valid',
+      user: {
+        id: user._id,
+        email: user.email,
+        companyName: user.companyName,
+        contactPerson: user.contactPerson,
+        role: user.role,
+        sector: user.sector
+      }
+    });
+
+  } catch (error) {
+    logger.error('Token verification error:', error);
+    res.status(401).json({
+      success: false,
+      message: 'Invalid token'
+    });
+  }
+});
+
+module.exports = router;

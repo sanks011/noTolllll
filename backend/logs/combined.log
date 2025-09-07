@@ -1,0 +1,183 @@
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:19:57.896Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:19:58.413Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T04:19:58.455Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:23:30.587Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:23:31.107Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T04:23:31.151Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:30:36.131Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:30:37.044Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:31:04.027Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:31:04.545Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T04:31:04.589Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:38:01.517Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:38:02.657Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T04:38:02.699Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:38:53.035Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:39:04.804Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:39:21.076Z"}
+{"level":"info","message":"New user registered: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T04:39:21.250Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:39:27.761Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:39:27.763Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:40:01.622Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T04:40:01.726Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:47:23.621Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:47:23.623Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:49:46.419Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:49:46.422Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:50:31.934Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:50:32.729Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T04:50:32.770Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:50:45.662Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:50:45.666Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:50:51.430Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:50:51.432Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:18.526Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:18.528Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:29.193Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:29.196Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:40.766Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:40.767Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:50.743Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:52:50.744Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:57:17.965Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:57:18.679Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T04:57:19.512Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T04:57:20.159Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T04:57:20.210Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:58:06.018Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T04:58:06.127Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:58:24.203Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:58:24.622Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:58:31.831Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T04:58:31.999Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:01:06.619Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:01:06.622Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.598Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.600Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.601Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.603Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.604Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.604Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.606Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:02:49.606Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.983Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.984Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.984Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.985Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.986Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.986Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.987Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:03:44.987Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:08:01.613Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:08:01.719Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:08:07.627Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:08:07.629Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:08:57.099Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:08:57.193Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:03.091Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:03.093Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:03.094Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:03.095Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:03.427Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:03.641Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:04.407Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:09:04.431Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:11:45.523Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:11:45.526Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:11:51.645Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:11:51.754Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:11:53.989Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:11:53.990Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:18.710Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:18.811Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.236Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.238Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.239Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.240Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.354Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.399Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.516Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:24.887Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:39.114Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:12:39.117Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:39.305Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:39.400Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.443Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.444Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.445Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.445Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.689Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.690Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.761Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:14:43.964Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:15:18.177Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:15:18.186Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:18.365Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:18.461Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.653Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.654Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.655Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.656Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.776Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.788Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.827Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:24.947Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:33.878Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:33.879Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:39.027Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:39.124Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.470Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.471Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.472Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.473Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.613Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.615Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.655Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:41.773Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:55.860Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:16:56.020Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:18:51.837Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:18:51.839Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:18:57.214Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:03.245Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:26.514Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:36.978Z"}
+{"level":"info","message":"New user registered: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.134Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.266Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.268Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.269Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.271Z"}
+{"level":"info","message":"GET /api/relief-schemes - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.388Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.391Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.413Z"}
+{"level":"info","message":"GET /api/dashboard/indian - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:37.556Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:47.375Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:47.501Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:19:49.670Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T05:44:42.697Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T05:44:43.805Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T05:44:43.847Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:45:22.095Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T05:46:09.379Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T05:46:10.228Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T05:46:10.271Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:46:33.529Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:46:33.640Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:46:48.673Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:46:48.808Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:47:00.969Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:47:01.241Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:48:01.454Z"}
+{"level":"info","message":"GET /api/buyers - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:48:01.626Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:48:03.301Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:48:03.445Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:57:31.986Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:57:31.988Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:57:47.341Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T05:57:47.441Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:57:54.722Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T05:57:54.723Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T06:04:31.483Z"}
+{"level":"info","message":"User signed in: tb123983@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T06:04:31.587Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T06:04:40.460Z"}
+{"level":"info","message":"GET /api/market-intelligence - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T06:04:40.599Z"}
