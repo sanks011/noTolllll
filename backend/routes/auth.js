@@ -105,9 +105,22 @@ router.post('/signup', async (req, res) => {
 // @desc    Authenticate user and get token
 // @access  Public
 router.post('/signin', async (req, res) => {
+  console.log('AUTH ROUTE HIT: /signin');
+  console.log('Request body:', req.body);
+  console.log('Request headers:', req.headers);
+  
   try {
     // Validate input
     const { error, value } = signinSchema.validate(req.body);
+    if (error) {
+      console.log('Validation error:', error.details[0].message);
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message
+      });
+    }
+    
+    console.log('Validation passed, proceeding with signin...');
     if (error) {
       return res.status(400).json({
         success: false,

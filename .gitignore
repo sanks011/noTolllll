@@ -67,3 +67,6 @@ backend/uploads/
 # Temporary files
 tmp/
 temp/
+
+.csv
+*.csv

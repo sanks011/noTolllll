@@ -43,6 +43,12 @@ const errorHandler = (err, req, res, next) => {
     error = { message, statusCode: 401 };
   }
 
+  // Check if response has already been sent
+  if (res.headersSent) {
+    console.log('Headers already sent, skipping error response');
+    return;
+  }
+
   res.status(error.statusCode || 500).json({
     success: false,
     message: error.message || 'Server Error',

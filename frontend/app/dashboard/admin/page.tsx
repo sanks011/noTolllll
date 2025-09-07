@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -17,8 +18,12 @@ import {
   BarChart3,
   UserCheck,
   AlertCircle,
+  Loader2,
 } from "lucide-react"
+import Link from "next/link"
 import DashboardLayout from "@/components/dashboard-layout"
+import AdminLoginModal from "@/components/AdminLoginModal"
+import { useAdminAuth } from "@/contexts/AdminAuthContext"
 
 // Sample admin data
 const adminData = {
@@ -32,7 +37,7 @@ const adminData = {
   },
   recentUsers: [
     { name: "Sarah Johnson", company: "Global Seafood LLC", role: "Buyer", country: "USA", status: "Active" },
-    { name: "Rajesh Kumar", company: "Chennai Spices Ltd.", role: "Seller", country: "India", status: "Pending" },
+    { name: "Sankalpa Sarkar", company: "Chennai Spices Ltd.", role: "Seller", country: "India", status: "Pending" },
     { name: "Ahmed Hassan", company: "Dubai Traders", role: "Buyer", country: "UAE", status: "Active" },
   ],
   systemAlerts: [
@@ -50,6 +55,74 @@ const adminData = {
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
+  const [showAdminLogin, setShowAdminLogin] = useState(false)
+  const [isVerifying, setIsVerifying] = useState(true)
+  const { admin, verifyToken, logout } = useAdminAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAdminAuth = async () => {
+      const isValidAdmin = await verifyToken()
+      if (!isValidAdmin) {
+        setShowAdminLogin(true)
+      }
+      setIsVerifying(false)
+    }
+    
+    checkAdminAuth()
+  }, [verifyToken])
+
+  const handleAdminLoginSuccess = () => {
+    setShowAdminLogin(false)
+  }
+
+  const handleLogout = () => {
+    logout()
+    router.push('/')
+  }
+
+  // Show loading spinner while verifying admin token
+  if (isVerifying) {
+    return (
+      <DashboardLayout userType="admin">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex items-center space-x-2">
+            <Loader2 className="h-6 w-6 animate-spin" />
+            <span>Verifying admin access...</span>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  // Show admin login modal if not authenticated
+  if (!admin) {
+    return (
+      <>
+        <DashboardLayout userType="admin">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center space-y-4">
+              <Shield className="h-12 w-12 mx-auto text-amber-500" />
+              <h2 className="text-2xl font-bold">Admin Access Required</h2>
+              <p className="text-muted-foreground">You need admin credentials to access this section.</p>
+              <Button 
+                onClick={() => setShowAdminLogin(true)}
+                className="bg-amber-600 hover:bg-amber-700"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Admin Login
+              </Button>
+            </div>
+          </div>
+        </DashboardLayout>
+        <AdminLoginModal 
+          open={showAdminLogin}
+          onOpenChange={setShowAdminLogin}
+          onSuccess={handleAdminLoginSuccess}
+        />
+      </>
+    )
+  }
 
   return (
     <DashboardLayout userType="admin">
@@ -63,8 +136,15 @@ export default function AdminDashboard() {
           <div className="flex items-center space-x-4">
             <Badge variant="destructive" className="px-3 py-1">
               <Shield className="mr-1 h-3 w-3" />
-              Administrator
+              Administrator ({admin.adminId})
             </Badge>
+            <Button 
+              onClick={handleLogout} 
+              variant="outline" 
+              size="sm"
+            >
+              Logout
+            </Button>
           </div>
         </div>
 
@@ -226,10 +306,12 @@ export default function AdminDashboard() {
                   <CardDescription>Upload tariff rates and trade data</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Button className="w-full">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Tariff Data (CSV)
-                  </Button>
+                  <Link href="/dashboard/admin/trade-data">
+                    <Button className="w-full">
+                      <Upload className="mr-2 h-4 w-4" />
+                      Manage Trade Data (CSV)
+                    </Button>
+                  </Link>
                   <Button className="w-full" variant="outline">
                     <Upload className="mr-2 h-4 w-4" />
                     Upload Price Trends (CSV)

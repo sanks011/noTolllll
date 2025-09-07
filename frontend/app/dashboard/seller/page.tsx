@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import ProfileCompletionModal from "@/components/ProfileCompletionModal"
 import NewsSection from "@/components/NewsSection"
+import TradeDataChart from "@/components/TradeDataChart"
 import { useAuth } from "@/contexts/AuthContext"
 import { apiService } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
@@ -183,6 +184,13 @@ export default function SellerDashboard() {
 
         {/* News Section */}
         <NewsSection className="mb-6" />
+
+        {/* Trade Analytics Section */}
+        {profileCompleted && (
+          <div className="mb-6">
+            <TradeDataChart userSector={user?.sector === 'Seafood' ? 'seafood' : user?.sector === 'Textile' ? 'textile' : null} />
+          </div>
+        )}
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {/* Recent Buyers */}
