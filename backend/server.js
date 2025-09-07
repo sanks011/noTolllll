@@ -9,7 +9,7 @@ require('dotenv').config();
 const connectDB = require('./config/database').connectDB;
 const logger = require('./config/logger');
 const errorHandler = require('./middleware/errorHandler');
-const authMiddleware = require('./middleware/auth');
+const { authMiddleware, adminMiddleware } = require('./middleware/auth');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -88,6 +88,7 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', authMiddleware, userRoutes);
+app.use('/api/admin', authMiddleware, adminMiddleware, dashboardRoutes); // Admin routes
 app.use('/api/market-intelligence', authMiddleware, marketIntelligenceRoutes);
 app.use('/api/buyers', authMiddleware, buyersRoutes);
 app.use('/api/compliance', authMiddleware, complianceRoutes);

@@ -11,10 +11,12 @@ const signupSchema = Joi.object({
   email: Joi.string().email().required(),
   companyName: Joi.string().min(2).max(100).required(),
   contactPerson: Joi.string().min(2).max(50).required(),
-  role: Joi.string().valid('Exporter', 'Processor', 'Farmer Group', 'International Trader').required(),
-  sector: Joi.string().valid('Seafood', 'Textile', 'Both').required(),
-  hsCode: Joi.string().required(),
-  targetCountries: Joi.array().items(Joi.string()).min(1).required(),
+  userType: Joi.string().valid('Indian', 'Foreigner').required(),
+  role: Joi.string().valid('Buyer', 'Seller').required(),
+  isAdmin: Joi.boolean().default(false),
+  sector: Joi.string().valid('Seafood', 'Textile', 'Both', 'Not specified').default('Not specified'),
+  hsCode: Joi.string().default(''),
+  targetCountries: Joi.array().items(Joi.string()).default([]),
   password: Joi.string().min(6).required()
 });
 
@@ -37,7 +39,7 @@ router.post('/signup', async (req, res) => {
       });
     }
 
-    const { email, companyName, contactPerson, role, sector, hsCode, targetCountries, password } = value;
+    const { email, companyName, contactPerson, userType, role, isAdmin, sector, hsCode, targetCountries, password } = value;
 
     // Check if user already exists
     const existingUser = await User.findByEmail(email);
@@ -53,7 +55,9 @@ router.post('/signup', async (req, res) => {
       email,
       companyName,
       contactPerson,
+      userType,
       role,
+      isAdmin: isAdmin || false,
       sector,
       hsCode,
       targetCountries,
@@ -80,7 +84,9 @@ router.post('/signup', async (req, res) => {
         email,
         companyName,
         contactPerson,
+        userType,
         role,
+        isAdmin: isAdmin || false,
         sector
       }
     });
@@ -154,7 +160,9 @@ router.post('/signin', async (req, res) => {
         email: user.email,
         companyName: user.companyName,
         contactPerson: user.contactPerson,
+        userType: user.userType,
         role: user.role,
+        isAdmin: user.isAdmin || false,
         sector: user.sector
       }
     });
@@ -200,7 +208,9 @@ router.post('/verify-token', async (req, res) => {
         email: user.email,
         companyName: user.companyName,
         contactPerson: user.contactPerson,
+        userType: user.userType,
         role: user.role,
+        isAdmin: user.isAdmin || false,
         sector: user.sector
       }
     });

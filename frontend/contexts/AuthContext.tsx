@@ -8,7 +8,9 @@ interface User {
   email: string
   companyName: string
   contactPerson: string
+  userType: string
   role: string
+  isAdmin?: boolean
   sector: string
   hsCode?: string
   targetCountries?: string[]
@@ -19,10 +21,12 @@ interface SignupData {
   password: string
   companyName: string
   contactPerson: string
+  userType: string
   role: string
-  sector: string
+  isAdmin?: boolean
+  sector?: string
   hsCode?: string
-  targetCountries: string[]
+  targetCountries?: string[]
 }
 
 interface AuthContextType {

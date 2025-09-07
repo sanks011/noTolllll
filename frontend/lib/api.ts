@@ -9,8 +9,12 @@ export interface AuthResponse {
     email: string;
     companyName: string;
     contactPerson: string;
+    userType: string;
     role: string;
     sector: string;
+    isAdmin?: boolean;
+    hsCode?: string;
+    targetCountries?: string[];
   };
 }
 
@@ -18,10 +22,11 @@ export interface SignupData {
   email: string;
   companyName: string;
   contactPerson: string;
+  userType: string;
   role: string;
-  sector: string;
+  sector?: string;
   hsCode?: string;
-  targetCountries: string[];
+  targetCountries?: string[];
   password: string;
 }
 
@@ -142,6 +147,13 @@ class ApiService {
 
   async getInternationalDashboard(): Promise<{ success: boolean; data: DashboardData }> {
     return this.request<{ success: boolean; data: DashboardData }>('/dashboard/international');
+  }
+
+  async updateProfile(profileData: any): Promise<{ success: boolean; message: string; user: any }> {
+    return this.request<{ success: boolean; message: string; user: any }>('/users/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
   }
 
   // Market Intelligence methods

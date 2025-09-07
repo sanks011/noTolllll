@@ -1,12 +1,12 @@
 const express = require('express');
 const comtradeService = require('../services/comtradeService');
 const logger = require('../config/logger');
-const auth = require('../middleware/auth');
+const { authMiddleware } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Apply authentication middleware
-router.use(auth);
+router.use(authMiddleware);
 
 // @route   GET /api/trade/potential-buyers/:cmdCode
 // @desc    Get potential buyers for a specific commodity

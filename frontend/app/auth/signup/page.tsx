@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Globe, ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
+import { Navbar } from "@/components/navbar"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/contexts/AuthContext"
@@ -24,20 +24,11 @@ export default function SignUpPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    userType: "",
     role: "",
-    sector: "",
-    hsCode: "",
-    targetCountries: [] as string[],
     companyName: "",
     contactPerson: "",
   })
-
-  const handleCountryChange = (country: string, checked: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      targetCountries: checked ? [...prev.targetCountries, country] : prev.targetCountries.filter((c) => c !== country),
-    }))
-  }
 
   const handleSubmit = async () => {
     if (formData.password !== formData.confirmPassword) {
@@ -56,22 +47,22 @@ export default function SignUpPage() {
         password: formData.password,
         companyName: formData.companyName,
         contactPerson: formData.contactPerson,
+        userType: formData.userType,
         role: formData.role,
-        sector: formData.sector,
-        hsCode: formData.hsCode,
-        targetCountries: formData.targetCountries,
+        sector: "Not specified", // Default value
+        targetCountries: [], // Default empty array
       })
 
       toast({
         title: "Account created successfully!",
-        description: "Welcome to TradeNavigator.",
+        description: "Welcome to TradeNavigator. Complete your profile in the dashboard.",
       })
 
       // Redirect to dashboard based on role
-      if (formData.role === "International Trader") {
-        router.push("/dashboard/international")
+      if (formData.role === "Buyer") {
+        router.push("/dashboard/buyer")
       } else {
-        router.push("/dashboard/indian")
+        router.push("/dashboard/seller")
       }
     } catch (error: any) {
       toast({
@@ -85,28 +76,28 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
+    <div className="min-h-screen bg-background">
+      <Navbar showAuth={false} />
+      <div className="flex items-center justify-center p-4 pt-8">
+        <div className="w-full max-w-md">
+          {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-2 text-primary hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
             <span>Back to home</span>
           </Link>
-          <div className="flex items-center justify-center space-x-2 mt-4 mb-2">
-            <Globe className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">TradeNavigator</span>
+          <div className="mt-4 mb-2">
+            <h1 className="text-2xl font-bold">Create Account</h1>
           </div>
-          <p className="text-muted-foreground">Create your export business account</p>
+          <p className="text-muted-foreground">Create your trade account</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Sign Up - Step {step} of 3</CardTitle>
+            <CardTitle>Sign Up - Step {step} of 2</CardTitle>
             <CardDescription>
-              {step === 1 && "Enter your email to get started"}
-              {step === 2 && "Tell us about your business"}
-              {step === 3 && "Select your target markets"}
+              {step === 1 && "Enter your basic information"}
+              {step === 2 && "Select your profile type"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -173,98 +164,47 @@ export default function SignUpPage() {
             {step === 2 && (
               <>
                 <div className="space-y-3">
+                  <Label>Are you Indian or International?</Label>
+                  <RadioGroup
+                    value={formData.userType}
+                    onValueChange={(value) => setFormData((prev) => ({ ...prev, userType: value }))}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="Indian" id="indian" />
+                      <Label htmlFor="indian">Indian</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="International" id="international" />
+                      <Label htmlFor="international">International</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                <div className="space-y-3">
                   <Label>Your Role</Label>
                   <RadioGroup
                     value={formData.role}
                     onValueChange={(value) => setFormData((prev) => ({ ...prev, role: value }))}
                   >
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Exporter" id="exporter" />
-                      <Label htmlFor="exporter">Exporter</Label>
+                      <RadioGroupItem value="Buyer" id="buyer" />
+                      <Label htmlFor="buyer">Buyer - I want to source products</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Processor" id="processor" />
-                      <Label htmlFor="processor">Processor (Factory Owner)</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Farmer Group" id="farmer" />
-                      <Label htmlFor="farmer">Farmer Cooperative</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="International Trader" id="international" />
-                      <Label htmlFor="international">International Trader</Label>
+                      <RadioGroupItem value="Seller" id="seller" />
+                      <Label htmlFor="seller">Seller - I want to export products</Label>
                     </div>
                   </RadioGroup>
-                </div>
-
-                <div className="space-y-3">
-                  <Label>Business Sector</Label>
-                  <RadioGroup
-                    value={formData.sector}
-                    onValueChange={(value) => setFormData((prev) => ({ ...prev, sector: value }))}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Seafood" id="seafood" />
-                      <Label htmlFor="seafood">Seafood (Shrimp, Prawn, Fish)</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Textile" id="textile" />
-                      <Label htmlFor="textile">Textile & Apparel</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Both" id="both" />
-                      <Label htmlFor="both">Both Sectors</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="hscode">Primary HS Code</Label>
-                  <Input
-                    id="hscode"
-                    placeholder="e.g., 030617 (Frozen Shrimp)"
-                    value={formData.hsCode}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, hsCode: e.target.value }))}
-                  />
                 </div>
 
                 <div className="flex space-x-2">
                   <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back
                   </Button>
-                  <Button onClick={() => setStep(3)} className="flex-1" disabled={!formData.role || !formData.sector}>
-                    Continue <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </>
-            )}
-
-            {step === 3 && (
-              <>
-                <div className="space-y-3">
-                  <Label>Target Export Markets (Select all that apply)</Label>
-                  <div className="space-y-2">
-                    {["European Union", "Japan", "South Korea", "UAE", "United Kingdom"].map((country) => (
-                      <div key={country} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={country}
-                          checked={formData.targetCountries.includes(country)}
-                          onCheckedChange={(checked) => handleCountryChange(country, checked as boolean)}
-                        />
-                        <Label htmlFor={country}>{country}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex space-x-2">
-                  <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
-                    <ArrowLeft className="mr-2 h-4 w-4" /> Back
-                  </Button>
                   <Button
                     onClick={handleSubmit}
                     className="flex-1"
-                    disabled={loading || formData.targetCountries.length === 0}
+                    disabled={loading || !formData.userType || !formData.role}
                   >
                     {loading ? "Creating Account..." : "Create Account"}
                   </Button>
@@ -280,6 +220,7 @@ export default function SignUpPage() {
             Sign in
           </Link>
         </p>
+        </div>
       </div>
     </div>
   )

@@ -18,12 +18,39 @@ router.get('/profile', async (req, res) => {
         email: user.email,
         companyName: user.companyName,
         contactPerson: user.contactPerson,
+        userType: user.userType,
         role: user.role,
+        isAdmin: user.isAdmin || false,
         sector: user.sector,
         hsCode: user.hsCode,
         targetCountries: user.targetCountries,
         isVerified: user.isVerified,
         createdAt: user.createdAt,
+        profileCompleted: user.profileCompleted || false,
+        // Extended profile fields
+        companySize: user.companySize,
+        annualTurnover: user.annualTurnover,
+        establishedYear: user.establishedYear,
+        businessDescription: user.businessDescription,
+        website: user.website,
+        primaryProducts: user.primaryProducts || [],
+        certifications: user.certifications || [],
+        targetMarkets: user.targetMarkets || [],
+        currentMarkets: user.currentMarkets || [],
+        // Buyer-specific fields
+        sourcingBudget: user.sourcingBudget,
+        orderFrequency: user.orderFrequency,
+        preferredSupplierLocation: user.preferredSupplierLocation,
+        qualityRequirements: user.qualityRequirements,
+        // Seller-specific fields
+        productionCapacity: user.productionCapacity,
+        exportExperience: user.exportExperience,
+        leadTime: user.leadTime,
+        minimumOrderQuantity: user.minimumOrderQuantity,
+        paymentTerms: user.paymentTerms,
+        // Additional fields
+        specialRequirements: user.specialRequirements,
+        businessGoals: user.businessGoals || [],
         metrics: {
           totalRevenue: user.totalRevenue,
           ordersSecured: user.ordersSecured,
@@ -51,10 +78,35 @@ router.put('/profile', async (req, res) => {
     const allowedUpdates = [
       'companyName', 
       'contactPerson', 
+      'userType',
       'role', 
       'sector', 
       'hsCode', 
-      'targetCountries'
+      'targetCountries',
+      // Extended profile fields
+      'companySize',
+      'annualTurnover',
+      'establishedYear',
+      'businessDescription',
+      'website',
+      'primaryProducts',
+      'certifications',
+      'targetMarkets',
+      'currentMarkets',
+      // Buyer-specific fields
+      'sourcingBudget',
+      'orderFrequency',
+      'preferredSupplierLocation',
+      'qualityRequirements',
+      // Seller-specific fields
+      'productionCapacity',
+      'exportExperience',
+      'leadTime',
+      'minimumOrderQuantity',
+      'paymentTerms',
+      // Additional fields
+      'specialRequirements',
+      'businessGoals'
     ];
     
     const updates = {};
@@ -69,6 +121,11 @@ router.put('/profile', async (req, res) => {
         success: false,
         message: 'No valid fields to update'
       });
+    }
+
+    // Mark profile as completed if comprehensive data is provided
+    if (updates.sector && updates.primaryProducts && updates.targetMarkets) {
+      updates.profileCompleted = true;
     }
 
     const result = await User.updateById(userId, updates);

@@ -5,10 +5,10 @@ const logger = require('../config/logger');
 
 const router = express.Router();
 
-// @route   GET /api/dashboard/indian
-// @desc    Get Indian trader dashboard data
+// @route   GET /api/dashboard/seller
+// @desc    Get Seller dashboard data (Previously Indian trader)
 // @access  Private
-router.get('/indian', async (req, res) => {
+router.get('/seller', async (req, res) => {
   try {
     const db = getDB();
     const user = req.user;
@@ -135,18 +135,18 @@ router.get('/indian', async (req, res) => {
   }
 });
 
-// @route   GET /api/dashboard/international
-// @desc    Get International trader dashboard data
+// @route   GET /api/dashboard/buyer
+// @desc    Get Buyer dashboard data (Previously International trader)
 // @access  Private
-router.get('/international', async (req, res) => {
+router.get('/buyer', async (req, res) => {
   try {
     const db = getDB();
     const user = req.user;
 
-    // Get supplier matches for international users
+    // Get supplier matches for buyer users
     const supplierMatches = await db.collection('users')
       .find({ 
-        role: { $in: ['Exporter', 'Processor'] },
+        role: 'Seller',
         sector: user.sector,
         isActive: true,
         _id: { $ne: new ObjectId(user._id) }
@@ -191,7 +191,94 @@ router.get('/international', async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('International dashboard error:', error);
+    logger.error('Buyer dashboard error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+// @route   GET /api/dashboard/admin
+// @desc    Get Admin dashboard data for platform management
+// @access  Private (Admin only)
+router.get('/admin', async (req, res) => {
+  try {
+    // Check if user is admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin privileges required.'
+      });
+    }
+
+    const db = getDB();
+    
+    // Get platform statistics
+    const totalUsers = await db.collection('users').countDocuments({ isActive: true });
+    const totalBuyers = await db.collection('users').countDocuments({ role: 'Buyer', isActive: true });
+    const totalSellers = await db.collection('users').countDocuments({ role: 'Seller', isActive: true });
+    const totalIndianUsers = await db.collection('users').countDocuments({ userType: 'Indian', isActive: true });
+    const totalForeigners = await db.collection('users').countDocuments({ userType: 'Foreigner', isActive: true });
+    
+    // Get recent registrations (last 7 days)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const recentRegistrations = await db.collection('users')
+      .countDocuments({ 
+        createdAt: { $gte: sevenDaysAgo },
+        isActive: true 
+      });
+
+    // Get user activity by sector
+    const sectorStats = await db.collection('users').aggregate([
+      { $match: { isActive: true } },
+      { $group: { _id: '$sector', count: { $sum: 1 } } }
+    ]).toArray();
+
+    // Get recent forum posts
+    const recentPosts = await db.collection('forumPosts')
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .toArray();
+
+    // Get buyers/sellers interactions summary
+    const totalInteractions = await db.collection('userBuyerInteractions').countDocuments();
+    const activeDeals = await db.collection('userBuyerInteractions')
+      .countDocuments({ status: { $in: ['In Negotiation', 'Deal Closed'] } });
+
+    const response = {
+      platformStats: {
+        totalUsers,
+        totalBuyers,
+        totalSellers,
+        totalIndianUsers,
+        totalForeigners,
+        recentRegistrations
+      },
+      sectorDistribution: sectorStats.map(stat => ({
+        sector: stat._id,
+        count: stat.count
+      })),
+      activityStats: {
+        totalForumPosts: recentPosts.length,
+        totalInteractions,
+        activeDeals
+      },
+      recentActivity: {
+        recentRegistrations,
+        recentForumPosts: recentPosts.length
+      }
+    };
+
+    res.json({
+      success: true,
+      data: response
+    });
+
+  } catch (error) {
+    logger.error('Admin dashboard error:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error'

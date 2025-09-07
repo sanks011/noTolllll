@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Globe, ArrowLeft } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
+import { Navbar } from "@/components/navbar"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/contexts/AuthContext"
@@ -34,10 +35,15 @@ export default function SignInPage() {
       })
 
       // Redirect to dashboard based on role
-      if (user?.role === "International Trader") {
-        router.push("/dashboard/international")
+      if (user?.isAdmin) {
+        router.push("/dashboard/admin")
+      } else if (user?.role === "Buyer") {
+        router.push("/dashboard/buyer")
+      } else if (user?.role === "Seller") {
+        router.push("/dashboard/seller")
       } else {
-        router.push("/dashboard/indian")
+        // Default fallback
+        router.push("/dashboard/buyer")
       }
     } catch (error: any) {
       toast({
@@ -51,20 +57,21 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 text-primary hover:text-primary/80">
-            <ArrowLeft className="h-4 w-4" />
-            <span>Back to home</span>
-          </Link>
-          <div className="flex items-center justify-center space-x-2 mt-4 mb-2">
-            <Globe className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">TradeNavigator</span>
+    <div className="min-h-screen bg-background">
+      <Navbar showAuth={false} />
+      <div className="flex items-center justify-center p-4 pt-8">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <Link href="/" className="inline-flex items-center space-x-2 text-primary hover:text-primary/80">
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back to home</span>
+            </Link>
+            <div className="mt-4 mb-2">
+              <h1 className="text-2xl font-bold">Welcome Back</h1>
+            </div>
+            <p className="text-muted-foreground">Sign in to your account</p>
           </div>
-          <p className="text-muted-foreground">Sign in to your account</p>
-        </div>
 
         <Card>
           <CardHeader>
@@ -108,6 +115,7 @@ export default function SignInPage() {
             Sign up
           </Link>
         </p>
+        </div>
       </div>
     </div>
   )

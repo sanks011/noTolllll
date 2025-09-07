@@ -346,3 +346,82 @@
 {"level":"info","message":"GET /api/forum/stats - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T08:14:23.827Z"}
 {"level":"info","message":"GET /api/forum/categories - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T08:14:23.832Z"}
 {"level":"info","message":"POST /api/forum/posts - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T08:14:28.641Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:12:36.177Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:12:36.987Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:12:37.032Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:15:52.931Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:15:52.936Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:17:16.473Z"}
+{"level":"info","message":"New user registered: sankalpasarkar68@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T10:17:16.657Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:17:37.845Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:17:37.848Z"}
+{"level":"info","message":"POST /api/auth/signin - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:17:51.944Z"}
+{"level":"info","message":"User signed in: sankalpasarkar68@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T10:17:52.081Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:47.009Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:47.946Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:47.998Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:51.816Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:51.821Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:57.101Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:57.974Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:25:58.025Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:06.349Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:07.075Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:07.133Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:14.386Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:15.150Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:15.210Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:21.621Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:22.267Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:22.312Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:34.189Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:34.800Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:26:34.854Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:25.552Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:26.173Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:26.219Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:39.686Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:40.432Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:40.480Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:53.207Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:53.841Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:27:53.896Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:15.296Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:15.951Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:16.023Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:23.950Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:24.614Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:24.665Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:40.728Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:41.444Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:28:41.496Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:29:20.515Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:29:21.300Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:29:21.348Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:48:35.358Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:48:35.981Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:48:36.033Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:55:08.248Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:55:08.868Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:55:08.920Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T10:59:07.336Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T10:59:07.988Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T10:59:08.042Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T11:00:54.462Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T11:01:02.215Z"}
+{"level":"info","message":"New user registered: sankalpasarkar69@gmail.com","service":"tradenavigator-api","timestamp":"2025-09-07T11:01:02.448Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T11:01:14.986Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T11:01:15.627Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T11:01:15.673Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T11:08:28.338Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T11:08:28.345Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T11:10:18.379Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T11:10:18.993Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T11:10:19.041Z"}
+{"level":"info","message":"POST /api/auth/signup - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T11:18:06.053Z"}
+{"level":"info","message":"New user registered: test@example.com","service":"tradenavigator-api","timestamp":"2025-09-07T11:18:06.249Z"}
+{"level":"info","message":"Server running on port 3001 in development mode","service":"tradenavigator-api","timestamp":"2025-09-07T11:18:58.125Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"tradenavigator-api","timestamp":"2025-09-07T11:18:58.779Z"}
+{"level":"info","message":"MongoDB ping successful","service":"tradenavigator-api","timestamp":"2025-09-07T11:18:58.842Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T11:24:36.332Z"}
+{"level":"info","message":"GET /api/auth/profile - ::1","service":"tradenavigator-api","timestamp":"2025-09-07T11:24:36.341Z"}

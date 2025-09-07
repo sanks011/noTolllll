@@ -5,12 +5,12 @@ const { getDB } = require('../config/database');
 const logger = require('../config/logger');
 const Post = require('../models/Post');
 const Comment = require('../models/Comment');
-const auth = require('../middleware/auth');
+const { authMiddleware } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Apply authentication middleware to all routes
-router.use(auth);
+router.use(authMiddleware);
 
 // Validation schemas
 const postSchema = Joi.object({
